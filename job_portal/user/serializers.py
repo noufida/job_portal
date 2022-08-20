@@ -1,3 +1,4 @@
+from dataclasses import fields
 from .models import Account
 from rest_framework import serializers
 
@@ -20,3 +21,8 @@ class AccountSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+class VerificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Account
+        fields=['is_active']
