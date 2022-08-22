@@ -1,8 +1,9 @@
-from hashlib import algorithms_available
+
 import jwt,datetime
 from rest_framework.exceptions import APIException
 from rest_framework.authentication import BaseAuthentication,get_authorization_header
 from .models import Account
+
 
 
 
@@ -50,3 +51,5 @@ class JWTAuthentication(BaseAuthentication):
 
         raise APIException ('unauthenticated')   
       
+
+

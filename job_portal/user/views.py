@@ -12,6 +12,15 @@ from .serializers import AccountSerializer, VerificationSerializer
 from . import verify
 from . authentication import decode_refresh_token, create_access_token,create_refresh_token,JWTAuthentication
 
+
+#verification_email
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMessage
+
 # Create your views here.
 
 @api_view(['POST'])
@@ -23,7 +32,7 @@ def register(request):
 
     mobile = data['mobile']
     request.session['mobile']=mobile
-    verify.send(mobile)
+    # verify.send(mobile)
     serializer = AccountSerializer(data=data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -37,7 +46,10 @@ def verify_code(request):
         mobile=request.session['mobile']
         code=data['code']
         if verify.check(mobile,code):
+            print('oooooo')
             user=Account.objects.get(mobile=mobile)
+            print('userrrrr')
+            print(user)
             user.is_active=True
             user.save()
             serializer=VerificationSerializer(user,many=False)
@@ -113,3 +125,66 @@ def logout_user(request):
         'message':'success'
     }
     return response
+
+@api_view(['POST'])
+def forgot_password(request):
+    data=request.data
+    email = data['email']
+    if Account.objects.filter(email=email).exists():
+        print(email)
+        user = Account.objects.get(email__exact=email)
+        print(user)
+        #reset password email
+        current_site = get_current_site(request)
+        mail_subject = 'Reset Your Password'
+        message = render_to_string('user/reset_password_email.html',{
+            'user' : user,
+            'domain' : current_site,
+            'uid' : urlsafe_base64_encode(force_bytes(user.id)),
+            'token' : default_token_generator.make_token(user),
+        })
+        to_email = email
+        send_email = EmailMessage(mail_subject, message, to=[to_email])
+        send_email.send()
+
+        message={'detail':'email has sent succesfully'}
+        return Response(message,status=status.HTTP_200_OK)
+
+    else:
+        message={'detail':'Account Does not Exist'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def reset_password(request):
+    password = request.data['password']
+    confirm_password = request.data['confirm_password']
+
+    if password == confirm_password:
+        uid = request.session.get('uid')
+        user = Account.objects.get(pk=uid)
+        user.set_password(password)
+        user.save()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
+    else:
+        message={'detail':'passwords does not match'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+   
+@api_view(['POST'])
+def resetpassword_validate(request,uidb64,token):
+    try:
+        print('jjjjjjjjjjj')
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        user = None
+    
+    if user is not None and default_token_generator.check_token(user,token):
+        print('iiiiiiiiii')
+        request.session['uid'] = uid
+        # reset_password()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
+    else:
+        message={'detail':'link expired'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
