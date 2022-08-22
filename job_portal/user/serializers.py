@@ -25,4 +25,4 @@ class AccountSerializer(serializers.ModelSerializer):
 class VerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Account
-        fields=['is_active']
+        fields=['is_active'] 
