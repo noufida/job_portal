@@ -72,9 +72,20 @@ def login_user(request):
     user = Account.objects.filter(email=email).first()
 
     if user is None:
-        raise APIException ('Invalid credentials')
+        # raise APIException ('Invalid credentials')
+        response = Response()
+        response.data = {
+            'message':'invalid credentials'
+        }
+        return response
+            
     if not user.check_password(password):
-        raise APIException ('Invalid credentials')
+        # raise APIException ('Invalid credentials')
+        response = Response()
+        response.data = {
+            'message':'invalid credentials'
+        }
+        return response
     
     access_token = create_access_token(user.id)
     refresh_token = create_refresh_token(user.id)
@@ -88,7 +99,12 @@ def login_user(request):
     response = Response()
     response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
     response.data = {
-        'token':access_token
+        'token':access_token,
+        'user_id':user.id,
+        'first_name':user.first_name,
+        'last_name':user.last_name,
+        'email':user.email,
+        'is_active':user.is_active
     }
     return response
 
