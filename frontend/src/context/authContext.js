@@ -2,6 +2,7 @@ import { createContext,useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate} from 'react-router-dom'
 import axios from '../axios'
+import axiosInstance from "../axios";
 
 const AuthContext = createContext()
 
@@ -9,6 +10,7 @@ export default AuthContext;
 
 export const AuthProvider = ({children})=>{
     const navigate = useNavigate()
+    const [mobile, setMobile] = useState('')
       
     let [authTokens, setAuthTokens] = useState(()=>localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(()=>localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
@@ -16,6 +18,8 @@ export const AuthProvider = ({children})=>{
         email:"",
         password:""
     })
+
+
               
         const userLogin=async(e)=>{
          
@@ -33,13 +37,24 @@ export const AuthProvider = ({children})=>{
                 navigate('/')
             }
        
-           })
+           }) 
+
          
        
     }
 
+    
 
-    let logoutUser = ()=>{
+
+    let logoutUser = async()=>{
+
+        await axiosInstance.post('user/logout/',).then((response)=>{
+            console.log(response.data)
+          
+      
+          }) 
+
+
         setAuthTokens(null)           
         setUser(null)
         localStorage.removeItem('authTokens')
@@ -53,7 +68,9 @@ export const AuthProvider = ({children})=>{
         userLogin:userLogin,
         setValues:setValues,
         values:values,
-        logoutUser:logoutUser
+        logoutUser:logoutUser,
+        mobile:mobile,
+        setMobile:setMobile
        
     }
     return(

@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import {AuthProvider} from './context/authContext'
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import HomePage from './pages/homePage';
+import RegisterPage from './pages/RegisterPage'
+import VerifyPage from './pages/verifyPage'
 
 function App() {
   return (
@@ -11,8 +13,10 @@ function App() {
       <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route element={<HomePage/>} path='/'/>
+          <Route element={<HomePage/>} exact path='/'/>
           <Route element={<LoginPage/>} path='/login'/>
+          <Route element={<RegisterPage/>} path='/register'/>
+          <Route element={<VerifyPage/>} path='/verify'/>
 
         </Routes>
         
