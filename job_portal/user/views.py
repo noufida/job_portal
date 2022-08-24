@@ -32,7 +32,7 @@ def register(request):
 
     mobile = data['mobile']
     request.session['mobile']=mobile
-    # verify.send(mobile)
+    verify.send(mobile)
     serializer = AccountSerializer(data=data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -43,8 +43,9 @@ def register(request):
 def verify_code(request):
     try:
         data=request.data
-        mobile=request.session['mobile']
+        mobile=data['mobile']
         code=data['code']
+        print(data,mobile,code,"jdsf")
         if verify.check(mobile,code):
             print('oooooo')
             user=Account.objects.get(mobile=mobile)
@@ -89,7 +90,6 @@ def login_user(request):
     
     access_token = create_access_token(user.id)
     refresh_token = create_refresh_token(user.id)
-
     UserToken.objects.create(
         user_id=user.id,
         token=refresh_token,
@@ -98,13 +98,16 @@ def login_user(request):
 
     response = Response()
     response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
+    print(response,"cokk")
     response.data = {
         'token':access_token,
+        'refresh':refresh_token,
         'user_id':user.id,
         'first_name':user.first_name,
         'last_name':user.last_name,
         'email':user.email,
-        'is_active':user.is_active
+        'is_active':user.is_active,
+
     }
     return response
 
@@ -113,20 +116,25 @@ def login_user(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def get_user(request):     
+def get_user(request):  
+    print('hiiii')   
     return Response(AccountSerializer(request.user).data)
 
 @api_view(['POST'])
 def refresh(request):
-    refresh_token = request.COOKIES.get('refresh_token')
-    id=decode_refresh_token(refresh_token)
-
-    if not UserToken.objects.filter(
-        user_id=id,
-        token=refresh_token,
-        expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)
-    ).exists:
-        raise APIException ('unauthenticated')
+    print("im refreshing")
+    data=request.data['refresh']
+    print(data,"kkkkkkkkk")
+    # refresh_token = request.COOKIES.get('refresh_token')
+    # print(refresh_token,"ref")
+    id=decode_refresh_token(data)
+    print(id,"id")
+    # if not UserToken.objects.filter(
+    #     user_id=id,
+    #     token=refresh_token,
+    #     expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)
+    # ).exists:
+    #     raise APIException ('unauthenticated')
     access_token=create_access_token(id)
     return Response({'token':access_token})
 
