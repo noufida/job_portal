@@ -6,6 +6,7 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import HomePage from './pages/homePage';
 import RegisterPage from './pages/RegisterPage'
 import VerifyPage from './pages/verifyPage'
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           <Route element={<LoginPage/>} path='/login'/>
           <Route element={<RegisterPage/>} path='/register'/>
           <Route element={<VerifyPage/>} path='/verify'/>
-
+          <Route  element={<ForgotPassword/>} path='/forgot_password'/>
         </Routes>
         
       </AuthProvider>

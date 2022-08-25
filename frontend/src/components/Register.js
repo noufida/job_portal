@@ -19,8 +19,20 @@ function BasicExample() {
   const [password, setPassword] = useState('')
   const [confirm_password, setConfirm_password] = useState('')
 
+  //states for validation
+  const [first_nameErr, setFirst_nameErr] = useState({})
+  const [last_nameErr, setLast_nameErr] = useState({})
+  const [emailErr, setEmailErr] = useState({})
+  const [mobileErr, setMobileErr] = useState({})
+  const [passwordErr, setPasswordErr] = useState({})
+  const [confirm_passwordErr, setConfirm_passwordErr] = useState({})
+
   const registerHandler = async(e)=>{
     e.preventDefault()
+    const isValid = formValidation()
+
+    if (isValid){
+ 
     await axios.post('user/register/',{
       first_name:first_name,
       last_name:last_name,
@@ -34,9 +46,80 @@ function BasicExample() {
       if (response.data.mobile){
 
         navigate('/verify')
+      }else{
+       console.log("klklkk")
       }
 
-    }) 
+    }) }
+  }
+
+  const formValidation=()=>{
+    
+    const first_nameErr={}
+    const last_nameErr ={}
+    const emailErr={}
+    const mobileErr={}
+    const passwordErr={}
+    const confirm_passwordErr={}
+    let isValid = true
+
+    //firstname validation
+    if (!first_name){
+      first_nameErr.short_fname = '*first name is a required field'
+      isValid = false
+    }else if(first_name.trim().length <3){
+      first_nameErr.short_fname = '*first name is too short'
+      isValid = false
+    }
+
+    //last name validation
+    if (!last_name){
+      last_nameErr.short_lname = '*last name is a required field'
+      isValid = false
+    }else if(last_name.trim().length <1){
+      last_nameErr.short_lname = '*last name is too short'
+      isValid = false
+    }
+
+    //email validation
+    if (!email){
+      emailErr.short_email= '*email is a required field'
+      isValid = false
+    }
+
+    //mobile validation
+    if (!mobile){
+      mobileErr.short_mobile= '*mobile no. is a required field'
+      isValid = false
+    }else if(mobile.trim().length != 10){
+      mobileErr.short_mobile= '*enter a valid mobile no.'
+      isValid = false
+    }else if( /^[a-zA-Z()]+$/.test(mobile)){
+      mobileErr.short_mobile= '*enter a valid mobile no.'
+      isValid = false
+    }
+
+    //password validation
+    if(!password ){
+      passwordErr.short_password= '*password is a required field'
+      isValid = false
+    }
+     if(!confirm_password){
+      confirm_passwordErr.short_cpassword= '* required field'
+      isValid = false
+    }
+     else if(password!=confirm_password){
+      confirm_passwordErr.password_mismatch= '*passwords does not match'
+      isValid = false
+    }
+
+    setFirst_nameErr(first_nameErr)
+    setLast_nameErr(last_nameErr)
+    setEmailErr(emailErr)
+    setMobileErr(mobileErr)
+    setPasswordErr(passwordErr)
+    setConfirm_passwordErr(confirm_passwordErr)
+    return isValid
   }
 
  
@@ -49,13 +132,20 @@ function BasicExample() {
       <Form.Control type="text" placeholder="Enter first name" value={first_name} onChange={(e)=>                
               setFirst_name(e.target.value)
               }/>
+               {Object.keys(first_nameErr).map((key)=>{
+                return <div style={{color:'red'}} >{first_nameErr[key]}</div>
+              })}
     </Form.Group>
     
+
     <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Last name</Form.Label>
       <Form.Control type="text" placeholder="Enter last name" value={last_name} onChange={(e)=>
               setLast_name(e.target.value)
               }/>
+               {Object.keys(last_nameErr).map((key)=>{
+                return <div style={{color:'red'}} >{last_nameErr[key]}</div>
+              })}
     </Form.Group>
     
     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -63,7 +153,9 @@ function BasicExample() {
       <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e)=>
               setEmail(e.target.value)
               }/>
-      
+                {Object.keys(emailErr).map((key)=>{
+                return <div style={{color:'red'}} >{emailErr[key]}</div>
+              })}
     </Form.Group>
     
     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -71,6 +163,9 @@ function BasicExample() {
       <Form.Control type="text" placeholder="Enter Mobile number" value={mobile} onChange={(e)=>
               setMobile(e.target.value)
               }/>
+              {Object.keys(mobileErr).map((key)=>{
+                return <div style={{color:'red'}} >{mobileErr[key]}</div>
+              })}
     </Form.Group>
     
     <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -78,12 +173,18 @@ function BasicExample() {
       <Form.Control type="password" placeholder="Password" value={password} onChange={(e)=>
               setPassword(e.target.value)
               } />
+              {Object.keys(passwordErr).map((key)=>{
+                return <div style={{color:'red'}} >{passwordErr[key]}</div>
+              })}
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicPassword">
       <Form.Label>Confirm Password</Form.Label>
       <Form.Control type="password" placeholder="confirm_password" value={confirm_password} onChange={(e)=>
               setConfirm_password(e.target.value)
               } />
+              {Object.keys(confirm_passwordErr).map((key)=>{
+                return <div style={{color:'red'}} >{confirm_passwordErr[key]}</div>
+              })}
     </Form.Group>
     {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
       <Form.Check type="checkbox" label="Check me out" />

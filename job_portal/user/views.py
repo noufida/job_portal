@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import datetime
 
 from rest_framework.decorators import api_view, permission_classes,authentication_classes
@@ -173,42 +173,40 @@ def forgot_password(request):
 
         message={'detail':'email has sent succesfully'}
         return Response(message,status=status.HTTP_200_OK)
+        
 
     else:
         message={'detail':'Account Does not Exist'}
         return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def reset_password(request):
-    password = request.data['password']
-    confirm_password = request.data['confirm_password']
+  
 
-    if password == confirm_password:
-        uid = request.session.get('uid')
-        user = Account.objects.get(pk=uid)
-        user.set_password(password)
-        user.save()
-        message={'detail':'success'}
-        return Response(message,status=status.HTTP_200_OK)
-    else:
-        message={'detail':'passwords does not match'}
-        return Response(message,status=status.HTTP_400_BAD_REQUEST)
-   
-@api_view(['POST'])
 def resetpassword_validate(request,uidb64,token):
-    try:
-        print('jjjjjjjjjjj')
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = Account._default_manager.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
-        user = None
-    
-    if user is not None and default_token_generator.check_token(user,token):
-        print('iiiiiiiiii')
-        request.session['uid'] = uid
-        # reset_password()
-        message={'detail':'success'}
-        return Response(message,status=status.HTTP_200_OK)
+    if request.method=='POST':
+        try:            
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = Account._default_manager.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
+            user = None
+        
+        if user is not None and default_token_generator.check_token(user,token):
+            request.session['uid'] = uid
+            print('succcess')
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+
+            if password == confirm_password:
+                print('passwords same')
+                uid = request.session.get('uid')
+                user = Account.objects.get(pk=uid)
+                user.set_password(password)
+                user.save()
+                message={'detail':'success'}
+                return render(request,'user/password_success.html')
+     
+        else:
+            message={'detail':'link expired'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
     else:
-        message={'detail':'link expired'}
-        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        print('no')
+        return render(request,'user/reset_password.html')

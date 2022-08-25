@@ -3,13 +3,14 @@ import Form from 'react-bootstrap/Form';
 import './login.css'
 import { useState,useContext } from 'react';
 import AuthContext from '../context/authContext';
-
+import axios from '../axios'
+import { Navigate, useNavigate} from 'react-router-dom'
 
 function BasicExample() {
 
   
-
-const {userLogin,values,setValues} = useContext(AuthContext)
+  const navigate = useNavigate()
+const {userLogin,values,setValues,authTokens} = useContext(AuthContext)
 
 
 
@@ -39,13 +40,12 @@ const loginHandler=(e)=>{
                 setValues({ ...values,[e.target.name]:e.target.value})
                 } />
       </Form.Group>
-      {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group> */}
+ 
       <div  style={{'textAlign':'center'}}>
       <Button variant="success" className='sub-button' type="submit" >
         Submit
-      </Button>
+      </Button><br></br><br></br><br></br>
+      <p onClick={()=>navigate('/forgot_password')} >forgot password?</p>
       </div>
     
     </Form></div>

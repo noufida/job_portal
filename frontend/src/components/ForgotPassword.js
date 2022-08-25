@@ -6,20 +6,23 @@ import axios from '../axios'
 import AuthContext from '../context/authContext';
 import { Navigate, useNavigate} from 'react-router-dom'
 
-function BasicExample() {
-  const navigate = useNavigate()
-    const [code, setCode] = useState('')
+function ForgotPassword() {
+    const [email, setEmail] = useState('')
+    const {authTokens} = useContext(AuthContext)
+    
+    const navigate = useNavigate()
+ 
     const {mobile} =useContext(AuthContext)
-    const verifyHandler=async(e)=>{
+
+    const forgotPassword=async(e)=>{
         e.preventDefault()
-        await axios.post('user/verify/',{
-            code:code,
-            mobile:mobile
-          }).then((response)=>{
+        await axios.post('user/forgot_password/',{
+          email:email
+          },
+          { headers:{Authorization: `Bearer ${authTokens?.token}`}}
+          ).then((response)=>{
             console.log(response.data)
-            if (response.data.is_active){
-              navigate('/login')
-            }
+          
       
           }) 
 
@@ -27,19 +30,16 @@ function BasicExample() {
  
   return (
     <div className='box'>
-      <h2 style={{'textAlign':'center'}}>VERIFY</h2>
-    <Form onSubmit={verifyHandler}>
+      <h2 style={{'textAlign':'center'}}>EMAIL</h2>
+    <Form onSubmit={forgotPassword}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Enter the code</Form.Label>
-        <Form.Control type="text" placeholder="" value={code} onChange={(e)=>
-               setCode(e.target.value)
+        <Form.Control type="email" placeholder="" value={email} onChange={(e)=>
+              setEmail(e.target.value)
                 }/>
       </Form.Group>
 
-    
-      {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group> */}
+ 
       <div  style={{'textAlign':'center'}}>
       <Button variant="success" className='sub-button' type="submit" >
         Submit
@@ -50,4 +50,4 @@ function BasicExample() {
   );
 }
 
-export default BasicExample;
+export default ForgotPassword;
