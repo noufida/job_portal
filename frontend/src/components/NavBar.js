@@ -8,7 +8,9 @@ import {useContext} from 'react'
 import AuthProvider from '../context/authContext'
 
 function NavScrollExample() {
+
  const {logoutUser} = useContext(AuthProvider)
+ 
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>

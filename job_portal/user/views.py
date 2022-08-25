@@ -25,16 +25,20 @@ from django.core.mail import EmailMessage
 
 @api_view(['POST'])
 def register(request):
+    
     data = request.data
 
     if data['password'] != data['confirm_password']:
-        raise APIException('passwords do not match!')
-
+        message={'detail':'passwords does not match'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+  
     mobile = data['mobile']
     request.session['mobile']=mobile
     verify.send(mobile)
     serializer = AccountSerializer(data=data)
-    serializer.is_valid(raise_exception=True)
+    print(serializer.is_valid())
+    a=serializer.is_valid(raise_exception=True)
+    print(a)
     serializer.save()
 
     return Response(serializer.data)
@@ -45,12 +49,8 @@ def verify_code(request):
         data=request.data
         mobile=data['mobile']
         code=data['code']
-        print(data,mobile,code,"jdsf")
         if verify.check(mobile,code):
-            print('oooooo')
             user=Account.objects.get(mobile=mobile)
-            print('userrrrr')
-            print(user)
             user.is_active=True
             user.save()
             serializer=VerificationSerializer(user,many=False)
@@ -98,7 +98,6 @@ def login_user(request):
 
     response = Response()
     response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
-    print(response,"cokk")
     response.data = {
         'token':access_token,
         'refresh':refresh_token,
@@ -201,7 +200,6 @@ def resetpassword_validate(request,uidb64,token):
                 user = Account.objects.get(pk=uid)
                 user.set_password(password)
                 user.save()
-                message={'detail':'success'}
                 return render(request,'user/password_success.html')
      
         else:

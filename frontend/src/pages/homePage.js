@@ -1,11 +1,9 @@
 
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import NavBar from '../components/NavBar'
-import Login from '../components/Login'
 import './loginpage.css'
 import axiosInstance from '../axios'
-import { useState,useContext } from 'react';
+import { useState } from 'react';
 
 function HomePage() {
   const [first, setfirst] = useState([])

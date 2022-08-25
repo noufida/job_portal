@@ -1,4 +1,4 @@
-import NavBar from './components/NavBar'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/LoginPage';
 import {AuthProvider} from './context/authContext'
@@ -6,7 +6,7 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import HomePage from './pages/homePage';
 import RegisterPage from './pages/RegisterPage'
 import VerifyPage from './pages/verifyPage'
-import ForgotPassword from './components/ForgotPassword';
+import ForgotPassword from './pages/forgotPassword';
 
 function App() {
   return (

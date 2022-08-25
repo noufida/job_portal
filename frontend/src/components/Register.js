@@ -4,8 +4,7 @@ import './login.css'
 import { useState,useContext } from 'react';
 import AuthContext from '../context/authContext';
 import axios from '../axios'
-import axiosInstance from "../axios";
-import { Navigate, useNavigate} from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 
 function BasicExample() {
@@ -19,7 +18,7 @@ function BasicExample() {
   const [password, setPassword] = useState('')
   const [confirm_password, setConfirm_password] = useState('')
 
-  //states for validation
+  //states for form validation
   const [first_nameErr, setFirst_nameErr] = useState({})
   const [last_nameErr, setLast_nameErr] = useState({})
   const [emailErr, setEmailErr] = useState({})
@@ -27,12 +26,13 @@ function BasicExample() {
   const [passwordErr, setPasswordErr] = useState({})
   const [confirm_passwordErr, setConfirm_passwordErr] = useState({})
 
+  //api call for user registration
   const registerHandler = async(e)=>{
     e.preventDefault()
     const isValid = formValidation()
-
+    console.log(first_name,last_name,email,mobile,password,confirm_password)
     if (isValid){
- 
+  
     await axios.post('user/register/',{
       first_name:first_name,
       last_name:last_name,
@@ -46,14 +46,20 @@ function BasicExample() {
       if (response.data.mobile){
 
         navigate('/verify')
-      }else{
-       console.log("klklkk")
+      }else if(console.data.detail){
+       console.log("detail")
       }
 
-    }) }
+    })  .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+    }) } 
   }
 
-  const formValidation=()=>{
+  //validation of form from frontend
+  const formValidation=()=>{    
     
     const first_nameErr={}
     const last_nameErr ={}
@@ -103,6 +109,9 @@ function BasicExample() {
     if(!password ){
       passwordErr.short_password= '*password is a required field'
       isValid = false
+    }else if(password.length <8  ) {
+      passwordErr.short_password= '*minimum 8 characters are required for password'
+      isValid = false
     }
      if(!confirm_password){
       confirm_passwordErr.short_cpassword= '* required field'
@@ -119,15 +128,18 @@ function BasicExample() {
     setMobileErr(mobileErr)
     setPasswordErr(passwordErr)
     setConfirm_passwordErr(confirm_passwordErr)
+
     return isValid
   }
 
  
+
+
   return (
     <div className='box-signup'>
     <h2 style={{'textAlign':'center'}}>SIGNUP</h2>
     <Form onSubmit={registerHandler} >
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formFname">
       <Form.Label>First name</Form.Label>
       <Form.Control type="text" placeholder="Enter first name" value={first_name} onChange={(e)=>                
               setFirst_name(e.target.value)
@@ -138,7 +150,7 @@ function BasicExample() {
     </Form.Group>
     
 
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formLname">
       <Form.Label>Last name</Form.Label>
       <Form.Control type="text" placeholder="Enter last name" value={last_name} onChange={(e)=>
               setLast_name(e.target.value)
@@ -158,7 +170,7 @@ function BasicExample() {
               })}
     </Form.Group>
     
-    <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Group className="mb-3" controlId="formMobile">
       <Form.Label>Mobile</Form.Label>
       <Form.Control type="text" placeholder="Enter Mobile number" value={mobile} onChange={(e)=>
               setMobile(e.target.value)
@@ -170,16 +182,16 @@ function BasicExample() {
     
     <Form.Group className="mb-3" controlId="formBasicPassword">
       <Form.Label>Password</Form.Label>
-      <Form.Control type="password" placeholder="Password" value={password} onChange={(e)=>
+      <Form.Control type="password" placeholder="Enter Password" value={password} onChange={(e)=>
               setPassword(e.target.value)
               } />
               {Object.keys(passwordErr).map((key)=>{
                 return <div style={{color:'red'}} >{passwordErr[key]}</div>
               })}
     </Form.Group>
-    <Form.Group className="mb-3" controlId="formBasicPassword">
+    <Form.Group className="mb-3" controlId="formConfirmPassword">
       <Form.Label>Confirm Password</Form.Label>
-      <Form.Control type="password" placeholder="confirm_password" value={confirm_password} onChange={(e)=>
+      <Form.Control type="password" placeholder="Confirm your password" value={confirm_password} onChange={(e)=>
               setConfirm_password(e.target.value)
               } />
               {Object.keys(confirm_passwordErr).map((key)=>{

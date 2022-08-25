@@ -3,25 +3,46 @@ import Form from 'react-bootstrap/Form';
 import './login.css'
 import { useState,useContext } from 'react';
 import AuthContext from '../context/authContext';
-import axios from '../axios'
 import { Navigate, useNavigate} from 'react-router-dom'
+import Modal from 'react-bootstrap/Modal';
 
-function BasicExample() {
+
+function BasicExample() { 
 
   
-  const navigate = useNavigate()
-const {userLogin,values,setValues,authTokens} = useContext(AuthContext)
+const navigate = useNavigate()
 
+const {userLogin,values,setValues,handleClose,handleShow,show} = useContext(AuthContext)   
 
-
-
+//calling function in authcontext
 const loginHandler=(e)=>{
   e.preventDefault()
   userLogin({...values})
+    
 }
  
   return (
+    
     <div className='box'>
+         
+
+   {/*---------- modal for showing response -----------*/}
+    <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+            
       <h2 style={{'textAlign':'center'}}>LOGIN</h2>
     <Form onSubmit={loginHandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -45,7 +66,7 @@ const loginHandler=(e)=>{
       <Button variant="success" className='sub-button' type="submit" >
         Submit
       </Button><br></br><br></br><br></br>
-      <p onClick={()=>navigate('/forgot_password')} >forgot password?</p>
+      <p style={{cursor:'pointer',color:'red'}} onClick={()=>navigate('/forgot_password')} >forgot password?</p>
       </div>
     
     </Form></div>

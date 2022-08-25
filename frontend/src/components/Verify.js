@@ -4,12 +4,17 @@ import './login.css'
 import { useState,useContext } from 'react';
 import axios from '../axios'
 import AuthContext from '../context/authContext';
-import { Navigate, useNavigate} from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 function BasicExample() {
+
   const navigate = useNavigate()
-    const [code, setCode] = useState('')
-    const {mobile} =useContext(AuthContext)
+
+  const [code, setCode] = useState('')
+  
+  const {mobile} =useContext(AuthContext)
+
+    //api call for otp verification
     const verifyHandler=async(e)=>{
         e.preventDefault()
         await axios.post('user/verify/',{
@@ -26,8 +31,8 @@ function BasicExample() {
       }
  
   return (
-    <div className='box'>
-      <h2 style={{'textAlign':'center'}}>VERIFY</h2>
+    <div className='box-email'>
+      <h2 style={{'textAlign':'center'}}>VERIFY YOUR ACCOUNT</h2><br/>
     <Form onSubmit={verifyHandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Enter the code</Form.Label>
@@ -37,9 +42,7 @@ function BasicExample() {
       </Form.Group>
 
     
-      {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group> */}
+     
       <div  style={{'textAlign':'center'}}>
       <Button variant="success" className='sub-button' type="submit" >
         Submit
