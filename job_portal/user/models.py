@@ -19,17 +19,17 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_staff(self,first_name,last_name,email,mobile,password):
-        user=self.create_user(
-            email = self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name,
-            mobile=mobile,
-            password=password
-        )        
-        user.is_staff = True 
-        user.save(using=self._db)
-        return user          
+    # def create_staff(self,first_name,last_name,email,mobile,password):
+    #     user=self.create_user(
+    #         email = self.normalize_email(email),
+    #         first_name=first_name,
+    #         last_name=last_name,
+    #         mobile=mobile,
+    #         password=password
+    #     )        
+    #     user.is_staff = True 
+    #     user.save(using=self._db)
+    #     return user          
   
     def create_superuser(self,first_name,last_name,email,mobile,password):
         user=self.create_user(
@@ -53,7 +53,7 @@ class Account(AbstractBaseUser):
     email = models.EmailField(max_length=30, unique=True)
     mobile = models.CharField(max_length=10, unique=True)
     date_joined = models.DateField(auto_now_add=True)
-    last_login = models.DateField(auto_now_add=True)
+    last_login = models.DateField(auto_now=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

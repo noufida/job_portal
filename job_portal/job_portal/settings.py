@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'user',
+    'employer'
     
 ]
 
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'job_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'job_portal',
+       'NAME': 'jobportal',
        'USER': 'postgres',
        'PASSWORD': '123',
        'HOST': '127.0.0.1',

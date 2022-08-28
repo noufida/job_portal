@@ -36,9 +36,7 @@ def register(request):
     request.session['mobile']=mobile
     verify.send(mobile)
     serializer = AccountSerializer(data=data)
-    print(serializer.is_valid())
     a=serializer.is_valid(raise_exception=True)
-    print(a)
     serializer.save()
 
     return Response(serializer.data)
@@ -123,7 +121,7 @@ def get_user(request):
 def refresh(request):
     print("im refreshing")
     data=request.data['refresh']
-    print(data,"kkkkkkkkk")
+    print(data)
     # refresh_token = request.COOKIES.get('refresh_token')
     # print(refresh_token,"ref")
     id=decode_refresh_token(data)
@@ -175,6 +173,7 @@ def forgot_password(request):
         
 
     else:
+        print("no such account")
         message={'detail':'Account Does not Exist'}
         return Response(message,status=status.HTTP_400_BAD_REQUEST)
 

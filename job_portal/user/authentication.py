@@ -12,7 +12,7 @@ from rest_framework.response import Response
 def create_access_token(id):
     return jwt.encode({
         'user_id':id,
-        'exp':datetime.datetime.utcnow()+ datetime.timedelta(seconds=30),
+        'exp':datetime.datetime.utcnow()+ datetime.timedelta(days=7),
         'iat':datetime.datetime.utcnow()
     }, 'access_secret', algorithm='HS256')
 
@@ -38,7 +38,6 @@ def decode_access_token(token):
 
 def decode_refresh_token(token):
     try:
-        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         payload = jwt.decode(token,'refresh_secret',algorithms='HS256')
         print(payload,123456)
         return payload['user_id']
@@ -49,9 +48,10 @@ def decode_refresh_token(token):
 class JWTAuthentication(BaseAuthentication):
   
     def authenticate(self,request):
-        print(request.headers,"mememe")
+      
         auth  = get_authorization_header(request).split()
-        print(auth,"looo")
+        print('yay')
+        print(auth,"auth")
         print(len(auth))
         if auth and len(auth) == 2:
             token = auth[1].decode('utf-8')
@@ -59,8 +59,7 @@ class JWTAuthentication(BaseAuthentication):
             id = decode_access_token(token)
             user = Account.objects.get(id=id)
             return (user,None)
-
-        print('iiiiiiiiiiii')
+      
         message={'detail':'error in serializer'}
         return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
