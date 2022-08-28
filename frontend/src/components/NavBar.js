@@ -6,15 +6,19 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {useContext} from 'react'
 import AuthProvider from '../context/authContext'
+import { useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import './login.css'
 
 function NavScrollExample() {
 
  const {logoutUser} = useContext(AuthProvider)
+ const navigate = useNavigate()
  
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className='p-3' bg="light" expand="lg">
       <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Brand href="#">seeker</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -22,33 +26,28 @@ function NavScrollExample() {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
+            
+          
+          
+            {/* <Nav.Link href="#" disabled>
+              Link
+            </Nav.Link> */}
+          </Nav>
+          <Link className='navlinks' to='/employer/register'>Employer Account</Link>
+          <p className='navlinks'>|</p>
+          <Link className='navlinks' to='/login'>Login</Link>
+          <Link className='navlinks' to="/register">Signup</Link>
+            {/*------------- user details and logout button---------- */}
+            <NavDropdown className='px-5' title="user" id="navbarScrollingDropdown">
+              <NavDropdown.Item href="#action3">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
+              <NavDropdown.Item  onClick={logoutUser}>
+                Signout
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-         
-          <Button onClick={logoutUser}>logout</Button>
-          </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>

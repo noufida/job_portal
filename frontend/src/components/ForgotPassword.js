@@ -1,8 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login.css'
-import { useState,useContext } from 'react';
-import axios from '../axios'
+import { useState,useContext,useEffect } from 'react';
+import axiosInstance from '../axios'
 import AuthContext from '../context/authContext';
 import {  useNavigate} from 'react-router-dom'
 
@@ -11,21 +11,28 @@ function ForgotPassword() {
     const {authTokens} = useContext(AuthContext)
 
     const [detail, setDetail] = useState('') //for catching response
-    
+    const [error, setError] = useState('') //for catching error
+  
+
     const navigate = useNavigate()
  
     //api call for password reset email
     const forgotPassword=async(e)=>{
         e.preventDefault()
-        await axios.post('user/forgot_password/',{
+        await axiosInstance.post('user/forgot_password/',{
           email:email
-          },
-          { headers:{Authorization: `Bearer ${authTokens?.token}`}}
+          }
           ).then((response)=>{
-            console.log(response.data.detail)
+            console.log(response.data.detail,"ok")
             setDetail(response.data.detail)
-      
-          }) 
+            setError(null)
+            
+           
+          }).catch((err)=>{
+            console.log(err.response.data.detail,"erorr")
+            setError(err.response.data.detail)
+            setDetail(null)
+          })
 
       }
  
@@ -50,7 +57,10 @@ function ForgotPassword() {
             style={{border:'solid green',color:'green'}} 
             variant="" className='sub-button' type="" > 
             Login
-            </Button></>) }
+            </Button></>)  }
+            {
+              (error) && <p style={{'color':'red'}}>{error}</p>
+            }
       </div>
     
     </Form></div>

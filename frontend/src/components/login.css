@@ -41,3 +41,10 @@
     padding-top: 13%;
 }
 
+
+/*--------------- navigation bar links ---------------*/
+.navlinks{
+    text-decoration: none;
+    color:black;
+    margin:8px
+}

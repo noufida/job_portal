@@ -198,9 +198,7 @@ function BasicExample() {
                 return <div style={{color:'red'}} >{confirm_passwordErr[key]}</div>
               })}
     </Form.Group>
-    {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-      <Form.Check type="checkbox" label="Check me out" />
-    </Form.Group> */}
+
     <div  style={{'textAlign':'center'}}>
     <Button variant="success" className='sub-button' type="submit" >
       Submit
