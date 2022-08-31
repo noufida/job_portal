@@ -8,6 +8,9 @@ class Employer(models.Model):
     company_website = models.CharField(max_length=30,null=True,blank=True)
     company_email = models.EmailField(max_length=30,unique=True)
     company_mobile = models.CharField(max_length=10,unique=True)
+    company_address = models.CharField(max_length=30)
+    employee_count = models.IntegerField()
+    description = models.TextField()
    
     def __str__(self):
         return self.company_name
@@ -26,20 +29,46 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+    
 
 
-class Subcategory(models.Model):
-    job_subcategory = models.CharField(max_length=30)
-    job_category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    created_on = models.DateField(auto_now_add=True)
-    updated_on = models.DateField(auto_now=True)
+TYPES=(
+    ("full time","full time"),
+    ("part time","part time")
+)
+
+MODES=(
+    ("on-site","on-site"),
+    ("remote","remote"),
+    ("hybrid","hybrid")
+)
+
+
+class Job(models.Model):
+    company = models.ForeignKey(Employer,on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,on_delete=models.DO_NOTHING)
+    designation = models.CharField(max_length=30)
+    vacancies = models.IntegerField(null=True,blank=True)
+    location = models.CharField(max_length=30)
+    type =models.CharField(max_length=30,choices=TYPES,default="full time")
+    workmode =models.CharField(max_length=30,choices=MODES,default="on-site")
+    experience_from = models.IntegerField()
+    experience_to = models.IntegerField()
+    job_description = models.TextField()
+    criteria = models.TextField()
+    payscale_from = models.IntegerField(null=True,blank=True)
+    payscale_to = models.IntegerField(null=True,blank=True)
 
     def __str__(self) :
-        return self.job_subcategory
-
+        return self.designation
+   
     
-    class Meta:
-        verbose_name = 'Subcategory'
-        verbose_name_plural = 'Subcategories'
+class Skill(models.Model):
+    job = models.ForeignKey(Job,on_delete=models.CASCADE)
+    skill = models.CharField(max_length=30)
+
+    def __str__(self) :
+        return self.skill
+
 
 

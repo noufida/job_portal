@@ -58,9 +58,27 @@ class JWTAuthentication(BaseAuthentication):
             print(token)
             id = decode_access_token(token)
             user = Account.objects.get(id=id)
+            print(user,"user is hhere")
             return (user,None)
       
         message={'detail':'error in serializer'}
         return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
 
+class JWTAuthenticationEmployer(BaseAuthentication):  
+
+    def authenticate(self,request):
+        print("employer authenticity")      
+        auth  = get_authorization_header(request).split()
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            id = decode_access_token(token)
+            user = Account.objects.get(id=id)
+            if user.is_staff:
+                return (user,None)
+            else:
+                message={'detail':'authorization errror'}
+                return Response(message,status=status.HTTP_400_BAD_REQUEST)
+                 
+        message={'detail':'error in serializer'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)

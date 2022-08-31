@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 import datetime
+from django.contrib import auth
 
 from rest_framework.decorators import api_view, permission_classes,authentication_classes
 from rest_framework.response import Response
@@ -85,29 +86,33 @@ def login_user(request):
             'message':'invalid credentials'
         }
         return response
+    user_verified = auth.authenticate(email=email, password=password)
     
-    access_token = create_access_token(user.id)
-    refresh_token = create_refresh_token(user.id)
-    UserToken.objects.create(
-        user_id=user.id,
-        token=refresh_token,
-        expired_at=datetime.datetime.utcnow()+ datetime.timedelta(days=7),
-    )
+    if user_verified:
+        access_token = create_access_token(user.id)
+        refresh_token = create_refresh_token(user.id)
+        UserToken.objects.create(
+            user_id=user.id,
+            token=refresh_token,
+            expired_at=datetime.datetime.utcnow()+ datetime.timedelta(days=7),
+        )
 
-    response = Response()
-    response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
-    response.data = {
-        'token':access_token,
-        'refresh':refresh_token,
-        'user_id':user.id,
-        'first_name':user.first_name,
-        'last_name':user.last_name,
-        'email':user.email,
-        'is_active':user.is_active,
+        response = Response()
+        response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
+        response.data = {
+            'token':access_token,
+            'refresh':refresh_token,
+            'user_id':user.id,
+            'first_name':user.first_name,
+            'last_name':user.last_name,
+            'email':user.email,
+            'is_active':user.is_active,
 
-    }
-    return response
-
+        }
+        return response
+    else:
+        message={'detail':'not verified'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
 
 
