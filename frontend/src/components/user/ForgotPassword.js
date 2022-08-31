@@ -2,8 +2,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login.css'
 import { useState,useContext,useEffect } from 'react';
-import axiosInstance from '../axios'
-import AuthContext from '../context/authContext';
+import axiosInstance from '../../axios'
+import AuthContext from '../../context/authContext';
 import {  useNavigate} from 'react-router-dom'
 
 function ForgotPassword() {

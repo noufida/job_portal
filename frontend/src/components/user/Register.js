@@ -2,8 +2,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login.css'
 import { useState,useContext } from 'react';
-import AuthContext from '../context/authContext';
-import axios from '../axios'
+import AuthContext from '../../context/authContext';
+import axios from '../../axios'
 import { useNavigate} from 'react-router-dom'
 
 

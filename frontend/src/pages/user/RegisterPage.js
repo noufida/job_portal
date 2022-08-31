@@ -1,22 +1,23 @@
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Login from '../components/Login'
+import Register from '../../components/user/Register'
 import './loginpage.css'
 
-function LoginPage() {
+function RegisterPage() {
   return (
    <>
-     
+      
       <Row className='justify-content-center mt-5 pt-5' >
        <Col lg={4}>
         
-       <Login/>
+       <Register/>
        </Col>
+      
 
       </Row>
  </>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

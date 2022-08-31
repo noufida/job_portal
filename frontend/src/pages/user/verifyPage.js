@@ -1,17 +1,21 @@
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ForgotPassword  from '../components/ForgotPassword'
+import NavBar from '../../components/user/NavBar'
+import Verify from '../../components/user/Verify'
 import './loginpage.css'
 
-function forgotPassword() {
+function VerifyPage() {
   return (
    <>
-      
+      <Row >
+      <NavBar/>
+
+      </Row>
       <Row className='justify-content-center mt-5 pt-5' >
        <Col lg={4}>
         
-       <ForgotPassword/>
+       <Verify/>
        </Col>
 
       </Row>
@@ -19,4 +23,4 @@ function forgotPassword() {
   );
 }
 
-export default forgotPassword;
+export default VerifyPage;

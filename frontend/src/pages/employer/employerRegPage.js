@@ -1,7 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import EmployerReg  from '../components/EmployerReg'
-import './loginpage.css'
+import EmployerReg  from '../../components/employer/EmployerReg'
+import './../user/loginpage.css'
 
 function employerReg() {
   return (

@@ -13,7 +13,7 @@
     height:500px;
     background-color:#ffff;
     padding:5%;
-    /* border:solid; */
+    /* border:solid ; */
     border-radius: 2%;
     padding-top: 13%;
 }
@@ -45,6 +45,6 @@
 /*--------------- navigation bar links ---------------*/
 .navlinks{
     text-decoration: none;
-    color:black;
+    color:#fff;
     margin:8px
 }

@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {useContext} from 'react'
-import AuthProvider from '../context/authContext'
+import AuthProvider from '../../context/authContext'
 import { useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import './login.css'
@@ -16,7 +16,7 @@ function NavScrollExample() {
  const navigate = useNavigate()
  
   return (
-    <Navbar className='p-3' bg="light" expand="lg">
+    <Navbar style={{color:'white',backgroundColor:'black'}} className='p-3'  expand="lg">
       <Container fluid>
         <Navbar.Brand href="#">seeker</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -33,14 +33,14 @@ function NavScrollExample() {
               Link
             </Nav.Link> */}
           </Nav>
-          <Link className='navlinks' to='/employer/register'>Employer Account</Link>
+          <Link  className='navlinks'  to='/employer/register'>Employer Account</Link>
           <p className='navlinks'>|</p>
           <Link className='navlinks' to='/login'>Login</Link>
           <Link className='navlinks' to="/register">Signup</Link>
             {/*------------- user details and logout button---------- */}
-            <NavDropdown className='px-5' title="user" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
+            <NavDropdown  className='navlinks px-5'  title="user" id="navbarScrollingDropdown">
+              <NavDropdown.Item   href="#action3">Profile</NavDropdown.Item>
+              <NavDropdown.Item  href="#action4">
                 Another action
               </NavDropdown.Item>
               <NavDropdown.Divider />

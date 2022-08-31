@@ -1,13 +1,16 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/user/LoginPage';
 import {AuthProvider} from './context/authContext'
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
-import HomePage from './pages/homePage';
-import RegisterPage from './pages/RegisterPage'
-import VerifyPage from './pages/verifyPage'
-import ForgotPassword from './pages/forgotPassword';
-import EmployerReg from './pages/employerRegPage';
+import HomePage from './pages/user/homePage';
+import RegisterPage from './pages/user/RegisterPage'
+import VerifyPage from './pages/user/verifyPage'
+import ForgotPassword from './pages/user/forgotPassword';
+import EmployerReg from './pages/employer/employerRegPage';
+import EmployerHomePage from './pages/employer/employerHomePage';
+import JobPost from './pages/employer/jobPostPage'
+import AddSkillPage from './pages/employer/addSkillPage'
 
 function App() {
   return (
@@ -20,7 +23,12 @@ function App() {
           <Route element={<RegisterPage/>} path='/register'/>
           <Route element={<VerifyPage/>} path='/verify'/>
           <Route  element={<ForgotPassword/>} path='/forgot_password'/>
+
+          {/* employer */}
           <Route  element={<EmployerReg/>} path='/employer/register'/>
+          <Route  element={<EmployerHomePage/>} path='/employer/home'/>
+          <Route  element={<JobPost/>} path='/employer/postjob'/>
+          <Route  element={<AddSkillPage/>} path='/employer/postjob/addskill'/>
         </Routes>
         
       </AuthProvider>
