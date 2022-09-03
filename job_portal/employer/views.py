@@ -71,12 +71,13 @@ def post_job(request):
 #adding skill sets for a job
 @api_view(['POST'])
 @authentication_classes([JWTAuthenticationEmployer])
-def add_skill(request):
+def add_skill(request,id):
+    print('hellooooooooooooooo')
     data = request.data
-    print('hello')
+    
     try:        
         skill = Skill.objects.create(
-            job_id = data['job'],
+            job_id = id,
             skill = data['skill']
         )
         serializer = SkillSerializer(skill, many=False)
@@ -94,6 +95,31 @@ def categories(request):
         print(category,"ji")
         serializer = CategorySerializer(category, many=True)
         return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#getting skills for a job
+@api_view(['GET'])
+@authentication_classes([JWTAuthenticationEmployer])
+def get_skills(request,id):
+    try:     
+        skill = Skill.objects.filter(job_id=id)
+        print(skill,"ji")
+        serializer = SkillSerializer(skill, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#deleting skill for a job
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthenticationEmployer])
+def delete_skill(request,id,skill_id):
+    try:     
+        Skill.objects.filter(job_id=id,id=skill_id).delete()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
     except:
         message = {'detail': 'Some problem occured'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
