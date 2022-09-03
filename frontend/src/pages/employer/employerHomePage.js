@@ -8,8 +8,8 @@ function employerHomePage() {
   return (
    <>
       <EmployerNav/>
-      <Row className='justify-content-center mt-5 pt-5' >
-       <Col lg={4}>        
+      <Row className='justify-content-center mt-5 pt-5 px-5' >
+       <Col lg={12}>        
        <EmployerHome/>
        </Col>
 

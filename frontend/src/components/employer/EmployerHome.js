@@ -9,11 +9,11 @@ function EmployerHome() {
   return (
     <div>
       <Row>
-        <Col lg={8} >
+        <Col lg={6} >
           <h1>Hire the right person for your Business</h1>
           <Button>Post a job</Button>
         </Col>
-        <Col lg={4} >
+        <Col lg={6} >
           <img className='imagehome' src={jobseek}/>
         </Col>
       </Row>

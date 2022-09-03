@@ -16,7 +16,7 @@ function EmployerNav() {
  const navigate = useNavigate()
  
   return (
-    <Navbar className='p-3' bg="info" expand="lg">
+    <Navbar className='p-3' bg="primary" expand="lg">
       <Container fluid>
         <Navbar.Brand href="#">seekerEmployer</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />

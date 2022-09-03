@@ -28,7 +28,7 @@ function App() {
           <Route  element={<EmployerReg/>} path='/employer/register'/>
           <Route  element={<EmployerHomePage/>} path='/employer/home'/>
           <Route  element={<JobPost/>} path='/employer/postjob'/>
-          <Route  element={<AddSkillPage/>} path='/employer/postjob/addskill'/>
+          <Route  element={<AddSkillPage/>} path='/employer/:id/addskill'/>
         </Routes>
         
       </AuthProvider>

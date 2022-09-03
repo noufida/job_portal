@@ -8,7 +8,7 @@ function AddSkillPage() {
   return (
    <>
       <EmployerNav/>
-      <Row className='justify-content-center mt-5 pt-5' >
+      <Row className='mt-5 pt-5 mx-2' >
        <Col lg={7}>        
        <AddSkill/>
        </Col>

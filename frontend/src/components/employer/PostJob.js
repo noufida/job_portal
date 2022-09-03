@@ -10,6 +10,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 
 function PostJob() {
+  const navigate = useNavigate()
+
     useEffect(() => {
         catHandler()
     },[])
@@ -52,10 +54,9 @@ function PostJob() {
     
         },{headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
           console.log(response.data)
-          if (response.status===200){
-        
-            console.log("success")
-            
+          if (response.status===200){            
+            console.log(response.data,"success")
+            navigate(`/employer/${response.data.id}/addskill`);
           }
         })  
         .catch((err)=>{
@@ -170,17 +171,17 @@ function PostJob() {
 
       <Form.Group style={{float:'left'}} className="mb-3 col-lg-6 col-sm-12">
         <Form.Label>Payscale: From </Form.Label>
-        <Form.Control placeholder="in years" onChange={(e)=>
+        <Form.Control placeholder="in LPA" onChange={(e)=>
         setP_from(e.target.value)} />      
         </Form.Group>
         
         <Form.Group style={{float:'left'}} className="mb-3 col-lg-6 col-sm-12">
         <Form.Label>to</Form.Label>
-        <Form.Control placeholder="in years" onChange={(e)=>
+        <Form.Control placeholder="in LPA" onChange={(e)=>
         setP_to(e.target.value)} />  <br/><br/>   
         </Form.Group>
       
-        <div  style={{'textAlign':'center'}}><br/>
+        <div  ><br/>
       <Button variant="success" className='sub-button' type="submit" >
         Next
       </Button>
