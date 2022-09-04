@@ -80,3 +80,10 @@ class UserToken(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField()
     
+
+class Resume(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    resume = models.FileField(upload_to='resume')
+
+    def __str__(self) :
+        return self.user.first_name

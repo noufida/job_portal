@@ -11,6 +11,9 @@ import EmployerReg from './pages/employer/employerRegPage';
 import EmployerHomePage from './pages/employer/employerHomePage';
 import JobPost from './pages/employer/jobPostPage'
 import AddSkillPage from './pages/employer/addSkillPage'
+import DashboardPage from './pages/employer/dashboardPage'
+import JobDetailPage from './pages/employer/jobDetailPage'
+import UploadResumePage from './pages/user/uploadResumePage'
 
 function App() {
   return (
@@ -23,12 +26,15 @@ function App() {
           <Route element={<RegisterPage/>} path='/register'/>
           <Route element={<VerifyPage/>} path='/verify'/>
           <Route  element={<ForgotPassword/>} path='/forgot_password'/>
+          <Route element={<UploadResumePage/>} exact path='/resume'/>
 
           {/* employer */}
           <Route  element={<EmployerReg/>} path='/employer/register'/>
           <Route  element={<EmployerHomePage/>} path='/employer/home'/>
           <Route  element={<JobPost/>} path='/employer/postjob'/>
-          <Route  element={<AddSkillPage/>} path='/employer/:id/addskill'/>
+          <Route  element={<AddSkillPage/>} path='/employer/postjob/:id/addskill'/>
+          <Route  element={<DashboardPage/>} path='/employer/dashboard'/>
+          <Route  element={<JobDetailPage/>} path='/employer/job/:id'/>
         </Routes>
         
       </AuthProvider>

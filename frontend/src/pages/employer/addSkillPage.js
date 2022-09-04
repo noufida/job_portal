@@ -1,6 +1,5 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import PostJob from '../../components/employer/PostJob'
 import EmployerNav from '../../components/employer/EmployerNav';
 import AddSkill from '../../components/employer/AddSkill';
 

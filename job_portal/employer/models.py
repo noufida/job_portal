@@ -3,7 +3,7 @@ from user.models import Account
 # Create your models here.
 
 class Employer(models.Model):    
-    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    user = models.OneToOneField(Account,on_delete=models.CASCADE,unique=True)
     company_name = models.CharField(max_length=30)
     company_website = models.CharField(max_length=30,null=True,blank=True)
     company_email = models.EmailField(max_length=30,unique=True)

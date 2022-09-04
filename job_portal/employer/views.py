@@ -18,6 +18,7 @@ def register_employer(request):
     data = request.data
     print(data,request.user,"iiii")
     try:
+        
         employer = Employer.objects.create(
             user = request.user,
             company_name = data['company_name'],
@@ -32,6 +33,9 @@ def register_employer(request):
         serializer = EmployerSerializer(employer, many=False)
         return Response(serializer.data)
     except:
+        if Employer.objects.filter(user=request.user).exists:
+            message = {'detail': 'Acoount already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
         message = {'detail': 'Some problem occured'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -72,7 +76,6 @@ def post_job(request):
 @api_view(['POST'])
 @authentication_classes([JWTAuthenticationEmployer])
 def add_skill(request,id):
-    print('hellooooooooooooooo')
     data = request.data
     
     try:        
@@ -112,6 +115,7 @@ def get_skills(request,id):
         message = {'detail': 'Some problem occured'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+
 #deleting skill for a job
 @api_view(['DELETE'])
 @authentication_classes([JWTAuthenticationEmployer])
@@ -120,6 +124,35 @@ def delete_skill(request,id,skill_id):
         Skill.objects.filter(job_id=id,id=skill_id).delete()
         message={'detail':'success'}
         return Response(message,status=status.HTTP_200_OK)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+#getting jobs of a company
+@api_view(['GET'])
+@authentication_classes([JWTAuthenticationEmployer])
+def get_jobs(request,id):
+    try:    
+        print("ahooy") 
+        jobs = Job.objects.filter(company__user_id=id).order_by('-id')
+        print(jobs,"ji")
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+#getting details of a particular job
+@api_view(['GET'])
+@authentication_classes([JWTAuthenticationEmployer])
+def job_detail(request,id):
+    try:
+        job = Job.objects.get(id=id)
+        print(job,"ji")
+        serializer = JobSerializer(job, many=False)
+        return Response(serializer.data)
     except:
         message = {'detail': 'Some problem occured'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)

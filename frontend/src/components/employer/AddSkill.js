@@ -5,16 +5,21 @@ import Form from 'react-bootstrap/Form'
 import AuthContext from '../../context/authContext';
 import axios from '../../axios'
 import Badge from 'react-bootstrap/Badge';
+import { useNavigate} from 'react-router-dom'
+
 
 function AddSkill() {
     const {authTokens} = useContext(AuthContext) 
     const [skill, setSkill] = useState('') //for adding skills
     const [skills, setSkills] = useState([]) //for getting skills of a job
     
+    const navigate = useNavigate()
+
+    //to load skills for the job with id
     useEffect(() => {
       getSkillsHandler()
     }, [])
-    
+   
 
     //for getting id from url
     const params = useParams();
@@ -88,9 +93,10 @@ function AddSkill() {
  
         {
           skills.map((obj)=><>
-          <Badge  bg="secondary">{obj.skill}</Badge>
-          <Button style={{borderRadius:'700px',marginRight:'4px',width:'20px',height:'25px'}} onClick={()=>deleteSkillsHandler(obj.id)}>x</Button>
-       
+          <Badge className='mx-2' bg="dark">
+          {obj.skill} <Button style={{borderRadius:'700px'}}
+           onClick={()=>deleteSkillsHandler(obj.id)} variant="secondary">x</Button>
+        </Badge>
           </> )
         }
         <h2>Add New skill</h2>
@@ -103,8 +109,10 @@ function AddSkill() {
       <Button variant="primary" type="submit">
         Add
       </Button>
-    </Form>
-
+    </Form><br/>
+    <Button variant="secondary" onClick={()=>navigate('/employer/dashboard')}>
+        Post Job
+      </Button>
     </div>
   )
 }

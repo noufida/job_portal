@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.authentication import get_authorization_header
 
-from .models import Account,UserToken
-from .serializers import AccountSerializer, VerificationSerializer
+from .models import Account, Resume,UserToken
+from .serializers import AccountSerializer, VerificationSerializer,ResumeSerializer
 from . import verify
 from . authentication import decode_refresh_token, create_access_token,create_refresh_token,JWTAuthentication
 
@@ -212,3 +212,22 @@ def resetpassword_validate(request,uidb64,token):
     else:
         print('no')
         return render(request,'user/reset_password.html')
+
+#uploading resume of user
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def resume(request):
+     
+    try:  
+        print(request.user,'hiiiiii')  
+        print(request.FILES,"fdge") 
+        resume = Resume.objects.create(
+            user = request.user,
+            resume = request.FILES['resume']
+        )
+        print(resume)
+        serializer = ResumeSerializer(resume, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)

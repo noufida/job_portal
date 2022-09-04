@@ -2,25 +2,22 @@ import React from 'react'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from '../../components/user/NavBar'
-import Verify from '../../components/user/Verify'
-import './loginpage.css'
+import UploadResume from '../../components/user/UploadResume';
 
-function VerifyPage() {
+function uploadResumePage() {
   return (
-   <>
-      <Row >
+    <div>
+          <Row >
       <NavBar/>
-
+     
       </Row>
       <Row className='justify-content-center mt-5 pt-5' >
-       <Col lg={4}>
-        
-       <Verify/>
-       </Col>
-
+     <Col lg={3}>
+        <UploadResume/>
+     </Col>
       </Row>
- </>
-  );
+    </div>
+  )
 }
 
-export default VerifyPage;
+export default uploadResumePage

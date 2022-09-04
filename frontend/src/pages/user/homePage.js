@@ -1,4 +1,4 @@
-
+import React from 'react'
 import Row from 'react-bootstrap/Row';
 import NavBar from '../../components/user/NavBar'
 import './loginpage.css'

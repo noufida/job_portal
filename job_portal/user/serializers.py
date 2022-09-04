@@ -1,5 +1,5 @@
 from dataclasses import fields
-from .models import Account
+from .models import Account,Resume
 from rest_framework import serializers
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -26,3 +26,9 @@ class VerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Account
         fields=['is_active'] 
+
+
+class ResumeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Resume
+        fields='__all__' 

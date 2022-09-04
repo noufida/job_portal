@@ -56,7 +56,7 @@ function PostJob() {
           console.log(response.data)
           if (response.status===200){            
             console.log(response.data,"success")
-            navigate(`/employer/${response.data.id}/addskill`);
+            navigate(`/employer/postjob/${response.data.id}/addskill`);
           }
         })  
         .catch((err)=>{
