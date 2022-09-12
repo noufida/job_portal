@@ -11,7 +11,6 @@ function BasicExample() {
   const {setMobile,mobile} =useContext(AuthContext)
   const navigate = useNavigate()
   
-
   const [first_name, setFirst_name] = useState('')
   const [last_name, setLast_name] = useState('')
   const [email, setEmail] = useState('')

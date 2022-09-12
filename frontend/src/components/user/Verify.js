@@ -6,6 +6,7 @@ import axios from '../../axios'
 import AuthContext from '../../context/authContext';
 import { useNavigate} from 'react-router-dom'
 
+
 function BasicExample() {
 
   const navigate = useNavigate()
@@ -31,8 +32,10 @@ function BasicExample() {
       }
  
   return (
+    
     <div className='box-email'>
       <h2 style={{'textAlign':'center'}}>VERIFY YOUR ACCOUNT</h2><br/>
+
     <Form onSubmit={verifyHandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Enter the code</Form.Label>

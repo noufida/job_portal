@@ -10,11 +10,8 @@ function RegisterPage() {
       
       <Row className='justify-content-center mt-5 pt-5' >
        <Col lg={4}>
-        
        <Register/>
        </Col>
-      
-
       </Row>
  </>
   );

@@ -13,10 +13,12 @@ function UploadResume() {
 
   //onchange event 
   const changeHandler = (event) => {
+    console.log(event.target.files[0].type,"kkk")
 		setSelectedFile(event.target.files[0]);
 		setIsFilePicked(true);
 	};
 
+  //api call to upload resume
   const handleSubmission=async(e)=>{
     console.log(selectedFile)
     const formData = new FormData();
@@ -46,23 +48,28 @@ function UploadResume() {
         <Card.Title>Upload a Resume</Card.Title>
         <Card.Text>
         <input type="file" name='resume' onChange={changeHandler}  required/>
-        {isFilePicked ? (
-
-          <div>
-            <p>Filename: {selectedFile.name}</p>
-            <p>Filetype: {selectedFile.type}</p>
-            <p>Size in bytes: {selectedFile.size}</p>
-            <p>
-              lastModifiedDate:{' '}
-              {selectedFile.lastModifiedDate.toLocaleDateString()}
-            </p>
-          </div>
+        { isFilePicked ? (
+            selectedFile.type !== 'application/pdf' &&
+            <div>
+              <p style={{color:'red'}}>*only pdf format is supported</p>
+            </div>
+          // <div>
+          //   <p>Filename: {selectedFile.name}</p>
+          //   <p>Filetype: {selectedFile.type}</p>
+          //   <p>Size in bytes: {selectedFile.size}</p>
+          //   <p>
+          //     lastModifiedDate:{' '}
+          //     {selectedFile.lastModifiedDate.toLocaleDateString()}
+          //   </p>
+          //</div>
 
           ) : (
           <p>Select a file to show details</p>
           )}
         </Card.Text>
-        <Button onClick={handleSubmission} type='submit' variant="primary">Upload Resume</Button>
+        {selectedFile  && 
+        selectedFile.type == 'application/pdf' &&       
+        <Button  onClick={handleSubmission} type='submit' variant="primary">Upload Resume</Button>}
       </Card.Body>
        
     </Card>

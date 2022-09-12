@@ -13,10 +13,8 @@ export const EmpProvider = ({children})=>{
      
   const [company, setCompany] = useState({})
  
-          
-       
-
-    
+              
+   
    
   
     let contextData={
@@ -31,3 +29,21 @@ export const EmpProvider = ({children})=>{
         </EmpContext.Provider>
     )
 }
+
+
+
+
+
+
+
+
+<Box
+component="form"
+sx={{
+  '& > :not(style)': { m: 1, width: '25ch' },
+}}
+noValidate
+autoComplete="off"
+>
+<TextField id="filled-basic" label="Filled" variant="filled" />
+</Box>

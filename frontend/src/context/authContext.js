@@ -39,12 +39,13 @@ export const AuthProvider = ({children})=>{
           await axios.post('user/login/',{
              ...values
            }).then((response)=>{
-             console.log(response.data)
+             console.log(response.data,"kiki")
             if (response.data.token){
+                console.log(response.data,"kiiiiii")
                 setAuthTokens(response.data)
                 setUser(jwt_decode(response.data.token))
                 localStorage.setItem('authTokens', JSON.stringify(response.data))
-                navigate('/')
+                navigate('/path')
             }if (response.data.message){
                 console.log(response.data.message)
                 handleShow()
@@ -68,7 +69,7 @@ export const AuthProvider = ({children})=>{
         setAuthTokens(null)           
         setUser(null)
         localStorage.removeItem('authTokens')
-        navigate('/login')
+        navigate('/')
     }
 
   
