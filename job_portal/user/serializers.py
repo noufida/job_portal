@@ -1,5 +1,5 @@
 from dataclasses import fields
-from .models import Account,Resume
+from .models import Account,Resume,Profile,Qualification,Experience,SkillSet
 from rest_framework import serializers
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -31,4 +31,24 @@ class VerificationSerializer(serializers.ModelSerializer):
 class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Resume
+        fields='__all__' 
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Profile
+        fields='__all__' 
+
+class QualificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Qualification
+        fields='__all__' 
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Experience
+        fields='__all__' 
+
+class SkillSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=SkillSet
         fields='__all__' 

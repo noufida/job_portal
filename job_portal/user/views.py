@@ -1,3 +1,4 @@
+from pipes import quote
 from django.shortcuts import render,redirect
 import datetime
 from django.contrib import auth
@@ -8,8 +9,8 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.authentication import get_authorization_header
 
-from .models import Account, Resume,UserToken
-from .serializers import AccountSerializer, VerificationSerializer,ResumeSerializer
+from .models import Account, Resume,UserToken,Profile,Qualification,Experience,SkillSet
+from .serializers import AccountSerializer, VerificationSerializer,ResumeSerializer,ProfileSerializer,QualificationSerializer,ExperienceSerializer,SkillSetSerializer
 from . import verify
 from . authentication import decode_refresh_token, create_access_token,create_refresh_token,JWTAuthentication
 
@@ -107,7 +108,7 @@ def login_user(request):
             'last_name':user.last_name,
             'email':user.email,
             'is_active':user.is_active,
-
+            'is_staff':user.is_staff,
         }
         return response
     else:
@@ -124,7 +125,8 @@ def get_user(request):
 
 @api_view(['POST'])
 def refresh(request):
-    print("im refreshing")
+    print("im refreshing",request.data)
+
     data=request.data['refresh']
     print(data)
     # refresh_token = request.COOKIES.get('refresh_token')
@@ -194,7 +196,7 @@ def resetpassword_validate(request,uidb64,token):
         
         if user is not None and default_token_generator.check_token(user,token):
             request.session['uid'] = uid
-            print('succcess')
+            print('succcess') 
             password = request.POST['password']
             confirm_password = request.POST['confirm_password']
 
@@ -227,6 +229,178 @@ def resume(request):
         )
         print(resume)
         serializer = ResumeSerializer(resume, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+# creating profile of candidates
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def profile(request):  
+    print(request.data)
+    try:
+        print("hello")
+        profile = Profile.objects.create(
+            user = request.user,
+            experienced = request.data['experienced'],
+            desired_job = request.data['desired_job'],
+            desired_location = request.data['desired_location']
+        )
+        serializer = ProfileSerializer(profile, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+# adding qualifications of candidates
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def qualification(request):  
+    print(request.data)
+    try:
+        print("hello")
+        qualification = Qualification.objects.create(
+            user = request.user,
+            degree = request.data['degree'],
+            college = request.data['college'],
+            joining_year = request.data['joining_year'],
+            passout_year = request.data['passout_year']
+        )
+        serializer = QualificationSerializer(qualification, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# getting qualifications of particular candidates
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def get_qualification(request):  
+    print(request.data)
+    try:
+        print("hello")
+        qualification = Qualification.objects.filter(user=request.user).order_by('-id')
+        serializer = QualificationSerializer(qualification, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# deleting particular qualification
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+def delete_qualification(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        qualification = Qualification.objects.get(id=id)
+        qualification.delete()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# adding experiences of candidates
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def experience(request):  
+    print(request.data)
+    try:
+        print("hello")
+        experience = Experience.objects.create(
+            user = request.user,
+            designation = request.data['designation'],
+            company = request.data['company'],
+            start = request.data['start'],
+            end = request.data['end'],
+            description = request.data['description']
+        )
+        serializer = ExperienceSerializer(experience, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# getting experiences of particular candidates
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def get_experience(request):  
+    print(request.data)
+    try:
+        print("hello")
+        experience = Experience.objects.filter(user=request.user).order_by('-id')
+        serializer = ExperienceSerializer(experience, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# deleting particular experience
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+def delete_experience(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        experience = Experience.objects.get(id=id)
+        experience.delete()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+#adding skill sets 
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def add_skill(request):
+    data = request.data
+    
+    try:        
+        skillset = SkillSet.objects.create(
+            user = request.user,
+            skill = data['skill']
+        )
+        serializer = SkillSetSerializer(skillset, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+# deleting particular skill
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+def delete_skill(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        skillset = SkillSet.objects.get(id=id)
+        skillset.delete()
+        message={'detail':'success'}
+        return Response(message,status=status.HTTP_200_OK)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+# getting skills of particular candidates
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def get_skill(request):  
+    print(request.data)
+    try:
+        print("hello")
+        skillset = SkillSet.objects.filter(user=request.user).order_by('-id')
+        serializer = SkillSetSerializer(skillset, many=True)
         return Response(serializer.data)
     except:
         message = {'detail': 'Some problem occured'}

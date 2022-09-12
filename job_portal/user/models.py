@@ -1,4 +1,5 @@
 
+from operator import mod
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -78,12 +79,54 @@ class UserToken(models.Model):
     user_id = models.IntegerField()
     token = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    expired_at = models.DateTimeField()
+    expired_at = models.DateField(auto_now_add=True)
     
 
 class Resume(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     resume = models.FileField(upload_to='resume')
 
-    def __str__(self) :
+
+    def __str__(self):
         return self.user.first_name
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    experienced =  models.BooleanField(default=False)
+    desired_job = models.CharField(max_length=30)
+    desired_location = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.user.first_name
+  
+
+class Qualification(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    degree = models.CharField(max_length=30)
+    college = models.CharField(max_length=50)
+    joining_year = models.IntegerField()
+    passout_year = models.IntegerField()
+
+    def __str__(self):
+        return self.user.first_name
+
+class Experience(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    designation = models.CharField(max_length=30)
+    company = models.CharField(max_length=30)
+    start = models.IntegerField()
+    end = models.IntegerField()
+    description = models.TextField()
+    
+    def __str__(self):
+        return self.user.first_name
+
+
+class SkillSet(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    skill = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.candidate.user.first_name
+

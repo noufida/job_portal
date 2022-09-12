@@ -46,7 +46,7 @@ MODES=(
 
 class Job(models.Model):
     company = models.ForeignKey(Employer,on_delete=models.CASCADE)
-    category = models.ForeignKey(Category,on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)
     designation = models.CharField(max_length=30)
     vacancies = models.IntegerField(null=True,blank=True)
     location = models.CharField(max_length=30)

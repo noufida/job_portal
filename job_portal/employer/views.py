@@ -77,8 +77,8 @@ def post_job(request):
 @authentication_classes([JWTAuthenticationEmployer])
 def add_skill(request,id):
     data = request.data
-    
-    try:        
+    print(id,request.data,"dddd")
+    try: 
         skill = Skill.objects.create(
             job_id = id,
             skill = data['skill']
@@ -86,8 +86,10 @@ def add_skill(request,id):
         serializer = SkillSerializer(skill, many=False)
         return Response(serializer.data)
     except:
-        message = {'detail': 'Some problem occured'}
+       
+        message = {'detail': 'Job does not exists'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+      
 
 #getting categories
 @api_view(['GET'])
@@ -106,14 +108,15 @@ def categories(request):
 @api_view(['GET'])
 @authentication_classes([JWTAuthenticationEmployer])
 def get_skills(request,id):
-    try:     
+    try:
         skill = Skill.objects.filter(job_id=id)
         print(skill,"ji")
         serializer = SkillSerializer(skill, many=True)
         return Response(serializer.data)
     except:
-        message = {'detail': 'Some problem occured'}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        message = {'detail': 'Job does not exists'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)   
+     
 
 
 #deleting skill for a job
@@ -152,6 +155,19 @@ def job_detail(request,id):
         job = Job.objects.get(id=id)
         print(job,"ji")
         serializer = JobSerializer(job, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#getting all job
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def jobs(request):
+    try:
+        job = Job.objects.all()
+        print(job,"ji")
+        serializer = JobSerializer(job, many=True)
         return Response(serializer.data)
     except:
         message = {'detail': 'Some problem occured'}
