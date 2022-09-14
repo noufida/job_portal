@@ -22,4 +22,6 @@ urlpatterns = [
     path('skill/', views.add_skill,name='add_skill'),
     path('get_skill/', views.get_skill,name='get_skill'),
     path('skill/<str:id>/', views.delete_skill,name='delete_skill'),
+
+    path('apply_job/<str:id>/', views.apply,name='apply'),
 ]       

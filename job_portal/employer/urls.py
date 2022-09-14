@@ -15,4 +15,8 @@ urlpatterns = [
     path('<str:id>/delete_skill/<str:skill_id>/', views.delete_skill,name='delete_skill'),
 
     path('jobs/', views.jobs,name='jobs'),
+    path('jobs/<str:id>/', views.job_des,name='job_des'),
+    path('jobs/<str:id>/skills', views.skill_for_job,name='skill_for_job'),
+
+    path('job_/', views.JobAPIView.as_view())
 ]   

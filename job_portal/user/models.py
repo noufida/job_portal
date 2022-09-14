@@ -1,5 +1,4 @@
 
-from operator import mod
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
@@ -128,5 +127,13 @@ class SkillSet(models.Model):
     skill = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.candidate.user.first_name
+        return self.user.first_name
 
+# class JobApplication(models.Model):
+#     user = models.ForeignKey(Account,on_delete=models.CASCADE)
+#     job = models.ForeignKey(Job,on_delete=models.CASCADE)
+#     created = models.DateTimeField(auto_now_add=True)
+#     modified = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.user.first_name

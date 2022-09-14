@@ -13,7 +13,8 @@ from .models import Account, Resume,UserToken,Profile,Qualification,Experience,S
 from .serializers import AccountSerializer, VerificationSerializer,ResumeSerializer,ProfileSerializer,QualificationSerializer,ExperienceSerializer,SkillSetSerializer
 from . import verify
 from . authentication import decode_refresh_token, create_access_token,create_refresh_token,JWTAuthentication
-
+from employer.models import JobApplication
+from employer.serializers import JobApplicationSerializer
 
 #verification_email
 from django.contrib.sites.shortcuts import get_current_site
@@ -125,7 +126,7 @@ def get_user(request):
 
 @api_view(['POST'])
 def refresh(request):
-    print("im refreshing",request.data)
+    print("im refreshing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",request.data)
 
     data=request.data['refresh']
     print(data)
@@ -401,6 +402,25 @@ def get_skill(request):
         print("hello")
         skillset = SkillSet.objects.filter(user=request.user).order_by('-id')
         serializer = SkillSetSerializer(skillset, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# candidates applying for jobs
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def apply(request,id): 
+    print("applyyyyyyyyyyyyyyyy") 
+    print(request.data)
+    try:
+        print("hello")
+        apply = JobApplication.objects.create(
+            user = request.user,
+            job_id = id
+        )
+        serializer = JobApplicationSerializer(apply, many=False)
         return Response(serializer.data)
     except:
         message = {'detail': 'Some problem occured'}

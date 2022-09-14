@@ -64,11 +64,19 @@ class Job(models.Model):
    
     
 class Skill(models.Model):
-    job = models.ForeignKey(Job,on_delete=models.CASCADE)
+    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name='job_skill')
     skill = models.CharField(max_length=30)
 
     def __str__(self) :
         return self.skill
 
 
+class JobApplication(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    job = models.ForeignKey(Job,on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.first_name
 

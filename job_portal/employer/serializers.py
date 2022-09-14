@@ -1,16 +1,13 @@
 from dataclasses import fields
-from .models import Employer,Job,Skill,Category
+from .models import Employer,Job,Skill,Category,JobApplication
 from rest_framework import serializers
+from user.serializers import AccountSerializer
 
 class EmployerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employer
         fields = '__all__'
         
-class JobSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Job
-        fields = '__all__'
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +17,18 @@ class SkillSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+        fields = '__all__'
+
+class JobSerializer(serializers.ModelSerializer):
+    company = EmployerSerializer(many=False)
+    category = CategorySerializer(many=False)
+    class Meta:
+        model = Job
+        fields = '__all__'
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    user = AccountSerializer(many=False)
+    job = JobSerializer(many=False)
+    class Meta:
+        model = JobApplication
         fields = '__all__'

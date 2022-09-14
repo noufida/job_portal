@@ -6,6 +6,8 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.decorators import api_view, permission_classes,authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import filters
+from rest_framework import generics
 
 from .models import Category, Employer,Job,Skill
 from .serializers import EmployerSerializer,JobSerializer,SkillSerializer,CategorySerializer
@@ -139,7 +141,9 @@ def get_jobs(request,id):
     try:    
         print("ahooy") 
         jobs = Job.objects.filter(company__user_id=id).order_by('-id')
-        print(jobs,"ji")
+        # j=Job.objects.get(id=14)
+        # p=j.job_skill.all()
+        # print(p,"jiiiiiiiiiiiiiii")
         serializer = JobSerializer(jobs, many=True)
         return Response(serializer.data)
     except:
@@ -172,3 +176,36 @@ def jobs(request):
     except:
         message = {'detail': 'Some problem occured'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#getting details of a particular job
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def job_des(request,id):
+    try:
+        job = Job.objects.get(id=id)
+        print(job,"ji")
+        serializer = JobSerializer(job, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#getting skills of a particular job
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def skill_for_job(request,id):
+    try:
+        skills=Skill.objects.filter(job=id)
+        print(skills,"ji")
+        serializer = SkillSerializer(skills, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+class JobAPIView(generics.ListCreateAPIView):
+    search_fields = ['designation','category__job_category','company__company_name','location']
+    filter_backends = (filters.SearchFilter,)
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
