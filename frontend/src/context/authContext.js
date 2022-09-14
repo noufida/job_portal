@@ -40,7 +40,7 @@ export const AuthProvider = ({children})=>{
              ...values
            }).then((response)=>{
              console.log(response.data,"kiki")
-            if (response.data.token){
+            if (response.status==200){
                 console.log(response.data,"kiiiiii")
                 setAuthTokens(response.data)
                 setUser(jwt_decode(response.data.token))

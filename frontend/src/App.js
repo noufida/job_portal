@@ -2,6 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/user/LoginPage';
 import {AuthProvider} from './context/authContext'
+import {JobProvider} from './context/jobContext'
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import HomePage from './pages/user/homePage';
 import RegisterPage from './pages/user/RegisterPage'
@@ -20,12 +21,14 @@ import QualificationPage from './pages/user/qualificationPage'
 import ExperiencePage from './pages/user/experiencePage'
 import SkillSetPage from './pages/user/skillSetPage'
 import JobPage from './pages/user/jobPage'
+import SingleJob from './pages/user/singleJobPage'
 
 function App() {
   return (
     <div>
       <BrowserRouter>
       <AuthProvider>
+        <JobProvider>
         <Routes>
           <Route element={<HomePage/>} exact path='/'/>
           <Route element={<LoginPage/>} path='/login'/>
@@ -42,6 +45,7 @@ function App() {
           <Route element={<SkillSetPage/>}  path='/candidate/skill'/>
           
           <Route element={<JobPage/>}  path='/jobs'/>
+          <Route element={<SingleJob/>}  path='/jobs/:id'/>
 
           {/* employer */}
           <Route  element={<EmployerReg/>} path='/employer/register'/>
@@ -52,6 +56,7 @@ function App() {
           <Route  element={<JobDetailPage/>} path='/employer/job/:id'/>
         </Routes>
         
+        </JobProvider>
       </AuthProvider>
       </BrowserRouter>
     </div>
