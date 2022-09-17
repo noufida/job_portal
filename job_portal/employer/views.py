@@ -95,7 +95,7 @@ def add_skill(request,id):
 
 #getting categories
 @api_view(['GET'])
-@authentication_classes([JWTAuthenticationEmployer])
+@authentication_classes([JWTAuthentication])
 def categories(request):
     try:     
         category = Category.objects.all()
@@ -166,7 +166,6 @@ def job_detail(request,id):
 
 #getting all job
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
 def jobs(request):
     try:
         job = Job.objects.all()
@@ -179,7 +178,6 @@ def jobs(request):
 
 #getting details of a particular job
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
 def job_des(request,id):
     try:
         job = Job.objects.get(id=id)

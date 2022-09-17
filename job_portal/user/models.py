@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
@@ -19,17 +20,7 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    # def create_staff(self,first_name,last_name,email,mobile,password):
-    #     user=self.create_user(
-    #         email = self.normalize_email(email),
-    #         first_name=first_name,
-    #         last_name=last_name,
-    #         mobile=mobile,
-    #         password=password
-    #     )        
-    #     user.is_staff = True 
-    #     user.save(using=self._db)
-    #     return user          
+         
   
     def create_superuser(self,first_name,last_name,email,mobile,password):
         user=self.create_user(
@@ -129,11 +120,3 @@ class SkillSet(models.Model):
     def __str__(self):
         return self.user.first_name
 
-# class JobApplication(models.Model):
-#     user = models.ForeignKey(Account,on_delete=models.CASCADE)
-#     job = models.ForeignKey(Job,on_delete=models.CASCADE)
-#     created = models.DateTimeField(auto_now_add=True)
-#     modified = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return self.user.first_name

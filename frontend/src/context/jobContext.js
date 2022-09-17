@@ -16,10 +16,27 @@ export const JobProvider = ({children})=>{
 
      //api call for getting skills of candidate
      const getJobHandler=async(e)=>{
-        await axios.get('employer/jobs/',
-        {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+        await axios.get('employer/jobs/').then((response)=>{
             console.log(response.data,"skills")
             setJob(response.data)
+            
+           
+          }).catch((err)=>{
+            console.log(err.response.data.detail,"erorr")
+            
+          })
+  
+      }
+
+       //api call for search
+     const searchHandler=async(search)=>{
+        await axios.get('employer/job_/?search=',{params:{search:search}},
+        {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+            console.log(response.data,"qualifications")
+            if (response.status === 200) {
+                console.log(response.data,"search result")
+                setJob(response.data)
+            }
             
            
           }).catch((err)=>{
@@ -34,6 +51,7 @@ export const JobProvider = ({children})=>{
   
     let contextData={
         getJobHandler:getJobHandler,
+        setJob:setJob,
         job:job
        
     }

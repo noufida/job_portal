@@ -37,6 +37,13 @@ function Qualification() {
   const [end, setEnd] = useState('')
 
   const [exp, setExp] = useState([])
+
+  //states for form validation
+  const [desigErr, setDesigErr] = useState('')
+  const [companyErr, setCompanyErr] = useState('')
+  const [descErr, setDescErr] = useState('')
+  const [startErr, setStartErr] = useState('')
+  const [endErr, setEndErr] = useState('')
   useEffect(() => {
     getHandler()
   }, [])
@@ -58,12 +65,62 @@ function Qualification() {
       }));      
       const lightTheme = createTheme({ palette: { mode: 'light' } });
 
+    
+  //validation of form from frontend
+  const formValidation=()=>{    
+    
+    const desigErr={}
+    const companyErr ={}
+    const descErr={}
+    const startErr ={}
+    const endErr={}
+    let isValid = true
 
+    //designation validation
+    if (!designation){
+      desigErr.short_fname = '*required field'
+      isValid = false}
+
+    //company validation
+    if (!company){
+      companyErr.short_lname = '*required field'
+      isValid = false}
+
+    //description validation
+    if (!description){
+      descErr.short_email= '*required field'
+      isValid = false
+    }
+
+     //start validation
+     if (!start){
+      startErr.short_email= '*required field'
+      isValid = false
+    }
+
+     //end validation
+     if (!end){
+      endErr.short_email= '*required field'
+      isValid = false
+    }
+
+    
+
+    setDesigErr(desigErr)
+    setCompanyErr(companyErr)
+    setDescErr(descErr)
+    setStartErr(startErr)
+    setEndErr(endErr)
+
+    return isValid
+  }
          
 
     //api call for adding experience
     const experienceHandler=async(e)=>{
       e.preventDefault()
+      const isValid = formValidation()  
+        if (isValid){
       await axios.post('user/experience/',{
         designation:designation,
         company:company,
@@ -78,7 +135,7 @@ function Qualification() {
         }).catch((err)=>{
           console.log(err.response.data.detail,"erorr")
           
-        })
+        })}
 
     }
 
@@ -147,9 +204,20 @@ function Qualification() {
             >
               <h5 style={{backgroundColor:'rgba(15, 15, 121, 0.363)',paddingLeft:'4px',lineHeight:'60px'}}>Experiences</h5>
                 <TextField id="outlined-basic" label="Desination" variant="standard" onChange={(e)=>setDesignation(e.target.value)} />
+                {Object.keys(desigErr).map((key)=>{
+                  return <div style={{color:'red'}} >{desigErr[key]}</div>
+                })}
+
                 <TextField id="outlined-basic" label="Company" variant="standard" onChange={(e)=>setCompany(e.target.value)}/>
+                {Object.keys(companyErr).map((key)=>{
+                  return <div style={{color:'red'}} >{companyErr[key]}</div>
+                })}
+                
                 <TextField id="outlined-basic" label="Description" variant="standard" onChange={(e)=>setDescription(e.target.value)}/>
-              
+                {Object.keys(descErr).map((key)=>{
+                  return <div style={{color:'red'}} >{descErr[key]}</div>
+                })}
+
             </Box>
             <Box
               sx={{
@@ -179,6 +247,9 @@ function Qualification() {
              
               ))}
         </Select>
+        {Object.keys(startErr).map((key)=>{
+                  return <div style={{color:'red'}} >{startErr[key]}</div>
+                })}
       </FormControl>
 
 
@@ -199,6 +270,9 @@ function Qualification() {
              
               ))}
         </Select>
+        {Object.keys(endErr).map((key)=>{
+                  return <div style={{color:'red'}} >{endErr[key]}</div>
+                })}
       </FormControl>
                 
             </Box><br/>

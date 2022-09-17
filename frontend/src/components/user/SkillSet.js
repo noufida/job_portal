@@ -37,6 +37,9 @@ function Qualification() {
   //states for onchange events
   const [skill, setSkill] = useState('')
 
+  //state for form validation
+  const [skillErr, setSkillErr] = useState('')
+
   const [skillset, setSkillset] = useState([])
   useEffect(() => {
     getHandler()
@@ -48,6 +51,23 @@ function Qualification() {
     'Add Experiences',
     'Add Skills',
   ];
+
+  //validation of form from frontend
+  const formValidation=()=>{    
+    
+      const skillErr={}
+      let isValid = true
+  
+      //designation validation
+      if (!skill){
+        skillErr.short_fname = '*add a skill'
+        isValid = false}
+ 
+  
+        setSkillErr(skillErr)
+  
+      return isValid
+    }
 
   //material ui for paper
     const Item = styled(Paper)(({ theme }) => ({
@@ -65,6 +85,8 @@ function Qualification() {
     //api call for adding skill
     const skillHandler=async(e)=>{
       e.preventDefault()
+      const isValid = formValidation()  
+        if (isValid){
       await axios.post('user/skill/',{
           skill:skill
         },{headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
@@ -79,7 +101,7 @@ function Qualification() {
         }).catch((err)=>{
           console.log(err.response.data.detail,"erorr")
           
-        })
+        })}
 
     }
 
@@ -148,7 +170,9 @@ function Qualification() {
               <h5 style={{backgroundColor:'rgba(15, 15, 121, 0.363)',paddingLeft:'4px',lineHeight:'60px'}}>Skills</h5>
               
                 <TextField id="outlined-basic" label="Skill" variant="outlined" onChange={(e)=>setSkill(e.target.value)} />
-              
+                {Object.keys(skillErr).map((key)=>{
+                  return <div style={{color:'red'}} >{skillErr[key]}</div>
+                })}
               
             </Box>
            <br/>

@@ -13,8 +13,8 @@ from .models import Account, Resume,UserToken,Profile,Qualification,Experience,S
 from .serializers import AccountSerializer, VerificationSerializer,ResumeSerializer,ProfileSerializer,QualificationSerializer,ExperienceSerializer,SkillSetSerializer
 from . import verify
 from . authentication import decode_refresh_token, create_access_token,create_refresh_token,JWTAuthentication
-from employer.models import JobApplication
-from employer.serializers import JobApplicationSerializer
+from employer.models import JobApplication,Favourite
+from employer.serializers import JobApplicationSerializer,FavSerializer, JobSerializer
 
 #verification_email
 from django.contrib.sites.shortcuts import get_current_site
@@ -23,7 +23,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
+from employer.models import Job
 # Create your views here.
 
 @api_view(['POST'])
@@ -424,4 +424,39 @@ def apply(request,id):
         return Response(serializer.data)
     except:
         message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# candidates favorite job
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def fav(request,id): 
+    print(request.data)
+    try:
+        print("hello")
+        apply = Favourite.objects.create(
+            user = request.user,
+            job_id = id
+        )
+        serializer = FavSerializer(apply, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+#getting jobs matching particular candidates
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def match_job(request):  
+    try:
+        profile = Profile.objects.filter(user=request.user).first()
+        print(profile)
+        job= profile.desired_job
+        print(job,'job')
+        match_job = Job.objects.filter(category__job_category=job).order_by('-id')
+        serializer = JobSerializer(match_job, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured in job match'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)

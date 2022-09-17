@@ -24,4 +24,6 @@ urlpatterns = [
     path('skill/<str:id>/', views.delete_skill,name='delete_skill'),
 
     path('apply_job/<str:id>/', views.apply,name='apply'),
+    path('fav_job/<str:id>/', views.fav,name='fav'),
+    path('match_job/', views.match_job,name='match_job'),
 ]       

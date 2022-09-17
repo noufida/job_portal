@@ -42,14 +42,3 @@
 }
 
 
-/*--------------- navigation bar links ---------------*/
-.navlinks{
-    text-decoration: none;
-    color:rgba(15, 15, 121, 0.363);
-    margin:8px;
-    font-weight: bold;
-}
-
-.navlinks:hover{
-    color:rgb(29, 29, 117)
-}

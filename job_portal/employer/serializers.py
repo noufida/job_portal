@@ -1,5 +1,5 @@
 from dataclasses import fields
-from .models import Employer,Job,Skill,Category,JobApplication
+from .models import Employer,Job,Skill,Category,JobApplication,Favourite
 from rest_framework import serializers
 from user.serializers import AccountSerializer
 
@@ -31,4 +31,11 @@ class JobApplicationSerializer(serializers.ModelSerializer):
     job = JobSerializer(many=False)
     class Meta:
         model = JobApplication
+        fields = '__all__'
+
+class FavSerializer(serializers.ModelSerializer):
+    user = AccountSerializer(many=False)
+    job = JobSerializer(many=False)
+    class Meta:
+        model = Favourite
         fields = '__all__'

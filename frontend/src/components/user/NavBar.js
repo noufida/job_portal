@@ -8,7 +8,7 @@ import {useContext} from 'react'
 import AuthProvider from '../../context/authContext'
 import { useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom'
-import './login.css'
+import './navbar.css'
 import AuthContext from '../../context/authContext';
 
 function NavScrollExample() {
@@ -18,7 +18,7 @@ function NavScrollExample() {
  const navigate = useNavigate()
  
   return (
-    <Navbar style={{color:'black',backgroundColor:'grey'}} className='p-3'  expand="lg">
+    <Navbar className='navbar p-3'  expand="lg">
       <Container fluid>
         <Navbar.Brand href="#">seeker</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -33,11 +33,11 @@ function NavScrollExample() {
          {/* <Link  className='navlinks' to='/employer/register'>Employer Account</Link> */}
          
          
-          <Link className='navlinks' to='/login'>Login</Link>
-          <p className='navlinks'>|</p>
-          <Link className='navlinks' to="/register">Signup</Link>
+          
             {/*------------- user details and logout button---------- */}
-            { authTokens && (
+            { authTokens ? (
+              <>
+              <Link className='navlinks' to='/'>Post Jobs</Link>
             <NavDropdown  className='navlinks px-5'  title="user" id="navbarScrollingDropdown">
               <NavDropdown.Item   href="#action3">Profile</NavDropdown.Item>
               <NavDropdown.Item  href="#action4">
@@ -47,7 +47,14 @@ function NavScrollExample() {
               <NavDropdown.Item  onClick={logoutUser}>
                 Signout
               </NavDropdown.Item>
-            </NavDropdown>) }
+            </NavDropdown></>):
+            <>
+          
+            <Link className='navlinks' to='/login'>Login</Link>
+          <p className='navlinks'>|</p>
+          <Link className='navlinks' to="/register">Signup</Link>
+            </>
+            }
         </Navbar.Collapse>
       </Container>
     </Navbar>

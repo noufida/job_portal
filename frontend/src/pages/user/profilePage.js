@@ -12,7 +12,7 @@ function profilePage() {
     </Row>
 
     <Row className='justify-content-center mt-5 pt-5' >
-   <Col lg={3}>
+   <Col lg={6}>
     <Profile/>
    </Col>
     </Row>

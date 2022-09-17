@@ -89,6 +89,24 @@ function SingleJob() {
       })
 
   }
+
+  //api call for fav a job
+  const favHandler=async()=>{
+    await axios.post(`user/fav_job/${a}/`,{},
+    {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+        console.log(response.data,"qualifications")
+        if (response.status === 200) {
+            console.log(response.data,"job fav")
+           
+        }
+        
+       
+      }).catch((err)=>{
+        console.log(err.response.data.detail,"erorr")
+        
+      })
+
+  }
   return (
     <div>
        <Modal show={show} onHide={handleClose}>
@@ -110,13 +128,14 @@ function SingleJob() {
             <Card.Subtitle className="mb-2 text-muted">{ jobDetail && jobDetail.category.job_category}</Card.Subtitle>
             <Card.Text>
             { jobDetail && jobDetail.company.company_name}
-            </Card.Text>
+            </Card.Text> <span>Skills Required:</span>
             {
               skill.map((obj)=>
               <p>{obj.skill}</p>
               )
             }
-            <Button onClick={applyHandler}>Apply</Button>
+            <Button onClick={applyHandler}>Apply</Button>{' '}
+            <Button onClick={favHandler}>Fav</Button>
           </Card.Body>
         </Card>
         </Col>

@@ -3,8 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import AuthContext from '../../context/authContext';
 import axios from '../../axios'
+import { useNavigate } from 'react-router-dom';
 
 function UploadResume() {
+  const navigate = useNavigate()
   const {authTokens} =useContext(AuthContext)
 
   //states for onchange event
@@ -71,8 +73,10 @@ function UploadResume() {
         selectedFile.type == 'application/pdf' &&       
         <Button  onClick={handleSubmission} type='submit' variant="primary">Upload Resume</Button>}
       </Card.Body>
-       
+      {selectedFile  && 
+        selectedFile.type == 'application/pdf' &&  <Button style={{margin:'15px'}} onClick={()=>navigate('/jobs')} >Explore Jobs</Button>}
     </Card>
+    <Button onClick={()=>navigate('/candidate/skill')} style={{margin:'15px'}} variant="dark">Previous</Button>
 
     </div>
   )

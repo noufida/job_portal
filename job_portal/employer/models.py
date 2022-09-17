@@ -80,3 +80,9 @@ class JobApplication(models.Model):
     def __str__(self):
         return self.user.first_name
 
+class Favourite(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    job = models.ForeignKey(Job,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.first_name

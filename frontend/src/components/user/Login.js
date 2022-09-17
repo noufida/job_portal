@@ -29,15 +29,12 @@ const loginHandler=(e)=>{
    {/*---------- modal for showing response -----------*/}
     <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title style={{color:'red'}}>Invalid Credentials!!</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Body style={{cursor:'pointer'}} onClick={()=>navigate('/forgot_password')}>Forgot Password?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>

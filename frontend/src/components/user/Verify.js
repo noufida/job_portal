@@ -5,6 +5,8 @@ import { useState,useContext } from 'react';
 import axios from '../../axios'
 import AuthContext from '../../context/authContext';
 import { useNavigate} from 'react-router-dom'
+import Alert from 'react-bootstrap/Alert';
+
 
 
 function BasicExample() {
@@ -15,6 +17,8 @@ function BasicExample() {
   
   const {mobile} =useContext(AuthContext)
 
+  const [show, setShow] = useState(false);
+
     //api call for otp verification
     const verifyHandler=async(e)=>{
         e.preventDefault()
@@ -24,10 +28,14 @@ function BasicExample() {
           }).then((response)=>{
             console.log(response.data)
             if (response.data.is_active){
-              navigate('/login')
+              navigate('/path')
             }
       
-          }) 
+          }).catch((err)=>{
+            setShow(true)
+            console.log(err.response.data.detail,"erorr")
+            
+          })
 
       }
  
@@ -35,6 +43,10 @@ function BasicExample() {
     
     <div className='box-email'>
       <h2 style={{'textAlign':'center'}}>VERIFY YOUR ACCOUNT</h2><br/>
+      { show && <>
+      <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+        <p>Enter Valid OTP</p>
+      </Alert></>}
 
     <Form onSubmit={verifyHandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">

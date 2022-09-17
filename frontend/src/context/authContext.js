@@ -40,12 +40,12 @@ export const AuthProvider = ({children})=>{
              ...values
            }).then((response)=>{
              console.log(response.data,"kiki")
-            if (response.status==200){
+            if (response.data.token){
                 console.log(response.data,"kiiiiii")
                 setAuthTokens(response.data)
                 setUser(jwt_decode(response.data.token))
                 localStorage.setItem('authTokens', JSON.stringify(response.data))
-                navigate('/path')
+                navigate('')
             }if (response.data.message){
                 console.log(response.data.message)
                 handleShow()

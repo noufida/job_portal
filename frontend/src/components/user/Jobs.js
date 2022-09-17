@@ -13,11 +13,15 @@ function Jobs() {
     const navigate = useNavigate()
     
     const [jobDetail, setJobDetail] = useState('')
+    const [search, setSearch] = useState('')
+    const [found, setFound] = useState(0)
+
     const {authTokens} = useContext(AuthContext)
-    const {getJobHandler,job} = useContext(JobContext)
+    const {getJobHandler,job,setJob} = useContext(JobContext)
 
         useEffect(() => {
         getJobHandler()
+        console.log("kk")
         
     }, [])
     
@@ -38,12 +42,47 @@ function Jobs() {
           })
   
       }
-       
+
+      //api call for search
+     const searchHandler=async()=>{
+        await axios.get('employer/job_/?search=',{params:{search:search}},
+        {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+            console.log(response.data,"qualifications")
+            if (response.status === 200) {
+                console.log(response.data,"search result")
+                setJob(response.data)
+                setFound(response.data.length)
+            }
+            
+           
+          }).catch((err)=>{
+            console.log(err.response.data.detail,"erorr")
+            
+          })
+  
+      }
+
+
   return (
     <div>
         <Row className='p-5'>
-            <Col  lg={7}>
-                {
+            <Col  lg={10} >
+            <input onKeyDown={e => e.key === 'Enter' && searchHandler()} 
+        onChange={(e)=>setSearch(e.target.value)} type="text"
+        style={{width:'100%', marginRight:'20px',height:'100%'}}
+        placeholder=' Search for a job or place...' />
+        
+            </Col>
+            <Col  lg={2}>
+            <Button style={{width:'100%',height:'100%',backgroundColor:'grey',border:'none'}}  onClick={searchHandler} >Search</Button>
+            </Col>
+        </Row>
+     
+    
+        
+        <Row className='p-5'>
+            <Col sm={12} lg={7}>
+             { 
                     job.map((obj)=>
                     <Card onClick={()=>getDetailHandler(obj.id)} style={{marginBottom:'10px',backgroundColor:''}} > 
             <Card.Body>
@@ -57,6 +96,7 @@ function Jobs() {
                 </Card.Text>
                 <Badge bg="secondary">PAYSCALE FROM {obj.payscale_from}LPA TO {obj.payscale_to}LPA</Badge>
                 {' '}<Badge bg="secondary">{obj.type}</Badge>
+                {' '}<br/><Badge bg="secondary">{obj.workmode}</Badge>
 
             </Card.Body>
             </Card>
@@ -65,7 +105,7 @@ function Jobs() {
             
           
             </Col>
-            <Col lg={5}>
+            <Col className="d-none d-lg-block" lg={5}>
             <Card >
             <Card.Body onClick={()=>navigate(`/jobs/${jobDetail.id}`)} >
                 <Card.Title>{jobDetail.designation}</Card.Title>

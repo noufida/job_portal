@@ -36,6 +36,12 @@ function Qualification() {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
 
+  //states for form validation
+  const [degErr, setDegErr] = useState('')
+  const [collErr, setCollErr] = useState('')
+  const [fromErr, setFromErr] = useState('')
+  const [toErr, setToErr] = useState('')
+
   const [qual, setQual] = useState([])
   useEffect(() => {
     getHandler()
@@ -47,6 +53,46 @@ function Qualification() {
     'Add Experiences',
     'Add Skills',
   ];
+
+      //validation of form from frontend
+      const formValidation=()=>{    
+    
+        const degErr={}
+        const collErr ={}
+        const fromErr={}
+        const toErr={}
+        let isValid = true
+    
+        //degree validation
+        if (!degree){
+          degErr.short_fname = '*required field'
+          isValid = false}
+    
+        //college validation
+        if (!college){
+          collErr.short_lname = '*required field'
+          isValid = false}
+    
+        //from validation
+        if (!from){
+          fromErr.short_email= '*required field'
+          isValid = false
+        }
+
+        //to validation
+        if (!to){
+          toErr.short_email= '*required field'
+          isValid = false
+        }
+    
+        
+    
+        setDegErr(degErr)
+        setCollErr(collErr)
+        setFromErr(fromErr)
+        setToErr(toErr)
+        return isValid
+      }
 
   //material ui for paper
     const Item = styled(Paper)(({ theme }) => ({
@@ -64,6 +110,8 @@ function Qualification() {
     //api call for adding qualification
     const qualificationHandler=async(e)=>{
       e.preventDefault()
+      const isValid = formValidation()  
+        if (isValid){
       await axios.post('user/qualification/',{
           degree:degree,
           college:college,
@@ -77,7 +125,7 @@ function Qualification() {
         }).catch((err)=>{
           console.log(err.response.data.detail,"erorr")
           
-        })
+        })}
 
     }
 
@@ -146,8 +194,14 @@ function Qualification() {
             >
               <h5 style={{backgroundColor:'rgba(15, 15, 121, 0.363)',paddingLeft:'4px',lineHeight:'60px'}}>Qualifications</h5>
                 <TextField id="outlined-basic" label="Degree" variant="standard" onChange={(e)=>setDegree(e.target.value)} />
+                {Object.keys(degErr).map((key)=>{
+                  return <div style={{color:'red'}} >{degErr[key]}</div>
+                })}
+                
                 <TextField id="outlined-basic" label="College/University" variant="standard" onChange={(e)=>setCollege(e.target.value)}/>
-              
+                {Object.keys(collErr).map((key)=>{
+                  return <div style={{color:'red'}} >{collErr[key]}</div>
+                })}
               
             </Box>
             <Box
@@ -178,6 +232,9 @@ function Qualification() {
              
               ))}
         </Select>
+        {Object.keys(fromErr).map((key)=>{
+                  return <div style={{color:'red'}} >{fromErr[key]}</div>
+                })}
       </FormControl>
 
 
@@ -198,6 +255,9 @@ function Qualification() {
              
               ))}
         </Select>
+        {Object.keys(toErr).map((key)=>{
+                  return <div style={{color:'red'}} >{toErr[key]}</div>
+                })}
       </FormControl>
                 
             </Box><br/>
@@ -238,7 +298,7 @@ function Qualification() {
           )
         }
 
-<Button style={{margin:'15px'}} variant="outlined">Previous</Button>
+<Button onClick={()=>navigate('/candidate/profile')} style={{margin:'15px'}} variant="outlined">Previous</Button>
 <Button onClick={()=>navigate('/candidate/experience')} style={{backgroundColor:'green',float:'right',margin:'15px'}} variant="contained">Next</Button>
   </Grid>
   
