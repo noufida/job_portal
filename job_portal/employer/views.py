@@ -8,9 +8,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import filters
 from rest_framework import generics
+from user.models import Account, Experience, Qualification, SkillSet
+from user.serializers import AccountSerializer, ExperienceSerializer, QualificationSerializer, SkillSetSerializer
 
-from .models import Category, Employer,Job,Skill
-from .serializers import EmployerSerializer,JobSerializer,SkillSerializer,CategorySerializer
+from .models import Category, Employer,Job, JobApplication,Skill
+from .serializers import EmployerSerializer, JobApplicationSerializer,JobSerializer,SkillSerializer,CategorySerializer
 
 from user.authentication import JWTAuthentication,JWTAuthenticationEmployer
 
@@ -207,3 +209,94 @@ class JobAPIView(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter,)
     queryset = Job.objects.all()
     serializer_class = JobSerializer
+
+
+#getting whether a  particular accconut is having a employer account
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def emp_account(request):  
+    try:
+        print("check for employer")
+        check = Employer.objects.filter(user=request.user).exists()
+        data = {
+            'status' : check
+        }
+        return Response(data)
+    except:
+        message = {'detail': 'Some problem occured in checking account'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+#getting candidates applied for a particular job
+@api_view(['GET'])
+@authentication_classes([JWTAuthenticationEmployer])
+def applicants(request,id):
+    try:
+        print('kkkkkkkkk')
+        jobapplication=JobApplication.objects.filter(job_id=id).order_by('-id')
+        print(jobapplication)
+        # a=[x.get(y) for x in jobapplication for y in x]
+        # print(a)
+        # user=Account.objects.filter(id__in=a)
+        # serializer = AccountSerializer(user, many=True)
+        # return Response(serializer.data)
+        serializer = JobApplicationSerializer(jobapplication,many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+#getting account of applicants with a id
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def app_details(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        user=Account.objects.get(id=id)
+        serializer = AccountSerializer(user, many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def app_exp(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        exp=Experience.objects.filter(user_id=id)
+        serializer = ExperienceSerializer(exp, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def app_qual(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        qual=Qualification.objects.filter(user_id=id)
+        serializer = QualificationSerializer(qual, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def app_skills(request,id):  
+    print(request.data)
+    try:
+        print("hello")
+        skill=SkillSet.objects.filter(user_id=id)
+        serializer = SkillSetSerializer(skill, many=True)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Some problem occured'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)

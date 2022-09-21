@@ -58,6 +58,9 @@ class Job(models.Model):
     criteria = models.TextField()
     payscale_from = models.IntegerField(null=True,blank=True)
     payscale_to = models.IntegerField(null=True,blank=True)
+    applicants = models.IntegerField(default=0)
+    hired = models.IntegerField(default=0)
+    status = models.CharField(max_length=30, default='active', null=True,blank=True)
 
     def __str__(self) :
         return self.designation
@@ -74,15 +77,18 @@ class Skill(models.Model):
 class JobApplication(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
+    status = models.CharField(max_length=30,default='pending')
+    applied = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
+        
     def __str__(self):
         return self.user.first_name
 
 class Favourite(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
+    applied = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name

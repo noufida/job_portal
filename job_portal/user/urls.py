@@ -12,6 +12,8 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password,name='forgot_password'),
     path('resetpassword_validate/<uidb64>/<token>',views.resetpassword_validate,name='resetpassword_validate'),
     path('resume/', views.resume,name='resume'),
+    path('update_resume/', views.update_resume,name='update_resume'),
+    path('get_resume/<str:id>/', views.get_resume,name='get_resume'),
     path('profile/', views.profile,name='profile'),
     path('qualification/', views.qualification,name='qualification'),
     path('get_qualification/', views.get_qualification,name='get_qualification'),
@@ -26,4 +28,5 @@ urlpatterns = [
     path('apply_job/<str:id>/', views.apply,name='apply'),
     path('fav_job/<str:id>/', views.fav,name='fav'),
     path('match_job/', views.match_job,name='match_job'),
+    path('job_appleid_or_not/<str:id>/', views.job_appleid_or_not,name='job_appleid_or_not'),
 ]       

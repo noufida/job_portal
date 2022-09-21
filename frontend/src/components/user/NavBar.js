@@ -4,18 +4,23 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import {useContext} from 'react'
+import {useContext, useEffect} from 'react'
 import AuthProvider from '../../context/authContext'
 import { useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import './navbar.css'
 import AuthContext from '../../context/authContext';
 
+
+
 function NavScrollExample() {
   const {authTokens} = useContext(AuthContext)
 
  const {logoutUser} = useContext(AuthProvider)
  const navigate = useNavigate()
+ 
+
+ 
  
   return (
     <Navbar className='navbar p-3'  expand="lg">
@@ -37,7 +42,9 @@ function NavScrollExample() {
             {/*------------- user details and logout button---------- */}
             { authTokens ? (
               <>
-              <Link className='navlinks' to='/'>Post Jobs</Link>
+              {authTokens.is_staff ?  <Link className='navlinks' to='/employer/dashboard' >Post Jobs</Link>
+              :  <Link className='navlinks' to='/employer/register' >Post Jobs</Link>}
+             
             <NavDropdown  className='navlinks px-5'  title="user" id="navbarScrollingDropdown">
               <NavDropdown.Item   href="#action3">Profile</NavDropdown.Item>
               <NavDropdown.Item  href="#action4">

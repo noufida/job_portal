@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'user',
-    'employer'
+    'employer',
+    'jobapplication'
     
 ]
 

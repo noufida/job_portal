@@ -1,0 +1,14 @@
+.applicants{
+    background-color: #ffff;
+    border: 1px solid rgb(9, 9, 126);
+    color:black
+}
+
+
+.applicants:hover {
+    background-color:rgb(9, 9, 126);
+    color: #ffff;
+}
+
+
+

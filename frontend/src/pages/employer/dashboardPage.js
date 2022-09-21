@@ -3,16 +3,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import EmployerNav from '../../components/employer/EmployerNav';
 import Dashboard from '../../components/employer/Dashboard';
+import Button from 'react-bootstrap/Button';
+import { useNavigate} from 'react-router-dom'
 
-function dashboardPage() {
+function DashboardPage() {
+  const navigate = useNavigate()
   return (
     <div>
       <EmployerNav/>
-    <Row className='mt-5 pt-5 mx-3' >
+      <Row><Col>
+      <Button onClick={()=>navigate('/employer/postjob')} className='mx-5 mt-5' style={{float:'right'}}>Post New Job</Button>
+      </Col></Row>
+    
      <Dashboard/>
 
-    </Row></div>
+ </div>
   )
 }
 
-export default dashboardPage
+export default DashboardPage

@@ -81,10 +81,11 @@ function Jobs() {
     
         
         <Row className='p-5'>
-            <Col sm={12} lg={7}>
+            <Col  style={{overflowY: 'scroll'}}  sm={12} lg={7}>
              { 
                     job.map((obj)=>
-                    <Card onClick={()=>getDetailHandler(obj.id)} style={{marginBottom:'10px',backgroundColor:''}} > 
+                    <Card
+                     onClick={()=>getDetailHandler(obj.id)} style={{marginBottom:'10px',boxShadow:'0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}} > 
             <Card.Body>
                 <Card.Title>{obj.designation[0].toUpperCase() + obj.designation.slice(1).toLowerCase()} </Card.Title>
                 <Card.Subtitle  className="mb-2 text-muted">{obj.category.job_category.toUpperCase()}</Card.Subtitle>
@@ -105,7 +106,7 @@ function Jobs() {
             
           
             </Col>
-            <Col className="d-none d-lg-block" lg={5}>
+            <Col   className="d-none d-lg-block " lg={5}>
             <Card >
             <Card.Body onClick={()=>navigate(`/jobs/${jobDetail.id}`)} >
                 <Card.Title>{jobDetail.designation}</Card.Title>

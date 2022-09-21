@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category,Employer,Job,Skill
+from .models import Category,Employer,Job,Skill,JobApplication
 # Register your models here.
 
 
@@ -14,3 +14,4 @@ admin.site.register(Category)
 admin.site.register(Employer)
 admin.site.register(Job,JobAdmin)
 admin.site.register(Skill)
+admin.site.register(JobApplication)

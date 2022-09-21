@@ -1,5 +1,7 @@
-import { createContext,useState, useEffect } from "react";
+import { createContext,useState, useContext } from "react";
 import { useNavigate} from 'react-router-dom'
+import AuthContext from './authContext';
+import axios from '../axios'
 
 const EmpContext = createContext()
 
@@ -9,17 +11,11 @@ export const EmpProvider = ({children})=>{
 
     const navigate = useNavigate()
 
+    const {authTokens} = useContext(AuthContext)
+
     
-     
-  const [company, setCompany] = useState({})
- 
-              
-   
-   
   
     let contextData={
-        company:company,
-        setCompany:setCompany
         
        
     }
@@ -36,14 +32,3 @@ export const EmpProvider = ({children})=>{
 
 
 
-
-<Box
-component="form"
-sx={{
-  '& > :not(style)': { m: 1, width: '25ch' },
-}}
-noValidate
-autoComplete="off"
->
-<TextField id="filled-basic" label="Filled" variant="filled" />
-</Box>

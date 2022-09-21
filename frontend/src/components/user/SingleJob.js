@@ -8,6 +8,12 @@ import AuthContext from '../../context/authContext';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Navigate, useNavigate} from 'react-router-dom'
+//dialog import
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function SingleJob() {
   const navigate = useNavigate()
@@ -15,8 +21,11 @@ function SingleJob() {
   const {authTokens} = useContext(AuthContext)
   const [jobDetail, setJobDetail] = useState('')
   const [skill, setSkill] = useState([])
+  const [check, setCheck] = useState(false)
 
   const [show, setShow] = useState(false);
+
+  const [resume, setResume] = useState('')
 
   const handleClose = () => {
     setShow(false);
@@ -30,11 +39,80 @@ function SingleJob() {
     console.log("usefeffee")
     getDetailHandler()
     skillHandler()
+    checkHandler()
+    getResumeHandler()
   }, [])
+
+  //dialog functions
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCloseD = () => {
+    setOpen(false);
+  };
   
   //for getting id from url
   const params = useParams();
   let a=params.id
+
+    //states for onchange event
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false)
+  
+    //onchange event 
+    const changeHandler = (event) => {
+      console.log(event.target.files[0].type,"kkk")
+      setSelectedFile(event.target.files[0]);
+      setIsFilePicked(true);
+    };
+  
+    //api call to update resume
+    const handleSubmission=async(e)=>{
+      console.log(selectedFile)
+      const formData = new FormData();
+      formData.append('resume', selectedFile);
+  
+      await axios.put('user/update_resume/',
+     formData,
+      {headers:{Authorization:`Bearer ${authTokens?.token}`,  'content-type': 'multipart/form-data'} } ).then((response)=>{
+         console.log(response.data)
+         if (response.status===200){
+          getResumeHandler()
+          setSelectedFile()
+           console.log("success")
+           
+         }
+       })  
+       .catch((err)=>{
+         console.log(err.response.data.detail,"erorr")
+        console.log(formData)
+       }) 
+     
+     }
+
+    //api call for getting resume of a candidate
+    const getResumeHandler=async()=>{
+      await axios.get(`user/get_resume/${authTokens.user_id}/`,
+      {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+          console.log(response.data,"qualifications")
+          if (response.status === 200) {
+              console.log(response.data,"resuuumee")
+              if(response.data.resume){
+                setResume(response.data)
+              }
+              
+          }
+          
+         
+        }).catch((err)=>{
+          console.log(err.response.data.detail,"erorr")
+          setResume('nothing to show')
+        })
+  
+    }
 
   //api call for getting details about a job
   const getDetailHandler=async()=>{
@@ -44,6 +122,24 @@ function SingleJob() {
         if (response.status === 200) {
             console.log(response.data,"dhgtfhrjyhyjtd")
             setJobDetail(response.data)
+        }
+        
+       
+      }).catch((err)=>{
+        console.log(err.response.data.detail,"erorr")
+        
+      })
+
+  }
+
+  //api call for checking whether appleid
+  const checkHandler=async()=>{
+    await axios.get(`user/job_appleid_or_not/${a}/`,
+    {headers:{Authorization:`Bearer ${authTokens?.token}`}} ).then((response)=>{
+      
+        if (response.status === 200) {
+            console.log(response.data,"check result")
+            setCheck(response.data.appleid)
         }
         
        
@@ -80,12 +176,13 @@ function SingleJob() {
         if (response.status === 200) {
             console.log(response.data,"job appleid")
             handleShow()
+            handleCloseD()
         }
         
        
       }).catch((err)=>{
         console.log(err.response.data.detail,"erorr")
-        
+        handleCloseD()
       })
 
   }
@@ -109,6 +206,47 @@ function SingleJob() {
   }
   return (
     <div>
+       <Dialog 
+        open={open}
+        onClose={handleCloseD}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Contact Information"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Email : {authTokens.email}<br/>
+            Phone : {authTokens.mobile}<hr/>
+          </DialogContentText>
+        </DialogContent>
+        <DialogTitle id="alert-dialog-title">
+          {"Resume"}
+        </DialogTitle>
+        <DialogContent>{resume &&
+          <DialogContentText id="alert-dialog-description">
+             Resume : {resume.resume.slice(13)}<br/>
+             <DialogContentText id="alert-dialog-description">
+            Upload new resume:
+          </DialogContentText>
+            <Button style={{backgroundColor:'#ffff',color:'black'}} ><input type="file" name='resume' onChange={changeHandler}  required/></Button>
+            {selectedFile  && 
+        selectedFile.type == 'application/pdf' &&       
+        <Button  onClick={handleSubmission} type='submit' variant="primary">Upload Resume</Button>}
+          </DialogContentText>}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={applyHandler}>Apply</Button>
+          <Button onClick={handleCloseD} autoFocus>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+
+
        <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Congrats!</Modal.Title>
@@ -134,8 +272,13 @@ function SingleJob() {
               <p>{obj.skill}</p>
               )
             }
-            <Button onClick={applyHandler}>Apply</Button>{' '}
+            {check ? <p>resume submitted</p> : <>
+            <Button onClick={handleClickOpen}>Apply</Button>{' '}
             <Button onClick={favHandler}>Fav</Button>
+            
+            
+            </>}
+
           </Card.Body>
         </Card>
         </Col>

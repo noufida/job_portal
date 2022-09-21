@@ -16,12 +16,12 @@ function HomePage() {
      
       </Row>
       
-      <Row className='justify-content-center ' >
-       <Col lg={12}>        
+    
+            
        <Home/>
-       </Col>
+     
 
-      </Row>
+ 
  </>
   );
 }

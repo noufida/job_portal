@@ -15,7 +15,6 @@ function EmployerHome() {
           <Button onClick={()=>navigate('/employer/postjob')}>Post a job</Button>
         </Col>
         <Col lg={6} >
-          {/* <img className='imagehome' src={jobseek}/> */}
         </Col>
       </Row>
     </div>

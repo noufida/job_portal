@@ -108,6 +108,7 @@ def login_user(request):
             'first_name':user.first_name,
             'last_name':user.last_name,
             'email':user.email,
+            'mobile':user.mobile,
             'is_active':user.is_active,
             'is_staff':user.is_staff,
         }
@@ -418,8 +419,13 @@ def apply(request,id):
         print("hello")
         apply = JobApplication.objects.create(
             user = request.user,
-            job_id = id
+            job_id = id,
+            applied = True
         )
+        job = Job.objects.get(id=id)
+        job.applicants += 1
+        job.save()
+       
         serializer = JobApplicationSerializer(apply, many=False)
         return Response(serializer.data)
     except:
@@ -436,7 +442,7 @@ def fav(request,id):
         print("hello")
         apply = Favourite.objects.create(
             user = request.user,
-            job_id = id
+            job_id = id,
         )
         serializer = FavSerializer(apply, many=False)
         return Response(serializer.data)
@@ -460,3 +466,46 @@ def match_job(request):
     except:
         message = {'detail': 'Some problem occured in job match'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#getting whether a  particular job is appleid by a particular candidate
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def job_appleid_or_not(request,id):  
+    try:
+        check = JobApplication.objects.filter(user=request.user,job_id=id).exists()
+        data = {
+            'appleid' : check
+        }
+        return Response(data)
+    except:
+        message = {'detail': 'Some problem occured in checking'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def get_resume(request,id):
+    try:
+        print(id,'llll')
+        resume=Resume.objects.filter(user_id=id).first()
+        print(resume,"iiiiiiiiiii")
+        serializer=ResumeSerializer(resume,many=False)
+        print(serializer,'serialixer of resuem')
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'no resume for this user'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@authentication_classes([JWTAuthentication])
+def update_resume(request):
+    resume=Resume.objects.filter(user=request.user).first()
+    print(resume.resume,'resume is here')
+    resume.resume=request.FILES['resume']
+    resume.save()
+    serializer=ResumeSerializer(resume,many=False)
+    print(serializer,'serialixer of resuem')
+   
+    return Response(serializer.data)
+
+
